@@ -1,0 +1,202 @@
+{
+	"info": {
+		"_postman_id": "5d3b3518-9513-42f6-a337-e33c16be46ec",
+		"name": "AgapeBackend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17341021"
+	},
+	"item": [
+		{
+			"name": "Campaign",
+			"item": [
+				{
+					"name": "Post Campaign",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"campaignYear\": 2025,\n    \"campaignChurch\": \"teste 1\",\n    \"foodDonationPerFamily\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/campaign",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"campaign"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Campaign by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/campaign/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"campaign",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Campaigns",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/campaign",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"campaign"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Campaign",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"campaignId\": 1,\n    \"campaignYear\": 2025,\n    \"campaignChurch\": \"teste update\",\n    \"foodDonationPerFamily\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/campaign",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"campaign"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Neighborhood",
+			"item": [
+				{
+					"name": "Post Neighborhood",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"neighborhoodName\": \"São Gonçalo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/neighborhood",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"neighborhood"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Neighborhood",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"neighborhoodId\": 1,\n    \"neighborhoodName\": \"Jardim Centenário\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/neighborhood",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"neighborhood"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Neighborhood by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/neighborhood/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"neighborhood",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Neighborhoods",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/neighborhood",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"neighborhood"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
