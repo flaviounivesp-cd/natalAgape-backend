@@ -5,7 +5,7 @@ import org.univesp.natalagapebackend.models.Campaign
 import org.univesp.natalagapebackend.services.CampaignService
 
 @RestController
-@RequestMapping("/campaign")
+@RequestMapping("api/campaign")
 class CampaignController(
      val campaignService: CampaignService
 ) {

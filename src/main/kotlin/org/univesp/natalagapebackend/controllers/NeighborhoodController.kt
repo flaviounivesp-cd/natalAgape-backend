@@ -5,7 +5,7 @@ import org.univesp.natalagapebackend.models.Neighborhood
 import org.univesp.natalagapebackend.services.NeighborhoodService
 
 @RestController
-@RequestMapping("/neighborhood")
+@RequestMapping("api/neighborhood")
 class NeighborhoodController(private val neighborhoodService: NeighborhoodService) {
     @GetMapping
     fun listAll() = neighborhoodService.listAll()
