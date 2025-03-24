@@ -1,1 +1,1 @@
-web: java -jar target/natalAgape-backend-1.0.0.jar
+web: java -jar build/libs/natalAgape-backend.jar --server.port=$PORT
