@@ -11,13 +11,10 @@ class Leadership(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val leaderId: Long,
     @Column(nullable = false) val leaderName: String,
+
     @Column(nullable = false) val leaderPhone: String,
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
     @Column(nullable = false) val leaderRole: Role,
 
-    @ManyToOne
-    @JoinColumn(name = "color_id")
     @Column(nullable = false) val leaderColor: Color
 )
