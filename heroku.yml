@@ -5,6 +5,7 @@ setup:
 build:
   docker:
     web: Dockerfile
+    worker: worker/Dockerfile
   config:
     APP_PROFILE: production
 run:
