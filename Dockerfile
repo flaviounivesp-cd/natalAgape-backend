@@ -21,4 +21,4 @@ RUN ./gradlew build -x test
 EXPOSE 8080
 
 # Set the entry point to run the application
-ENTRYPOINT ["java", "-jar", "build/libs/natalAgape-backend-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "build/libs/natalagape-backend-0.0.1-SNAPSHOT.jar"]
