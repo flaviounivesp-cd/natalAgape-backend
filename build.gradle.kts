@@ -50,7 +50,7 @@ allOpen {
 
 tasks.withType<Jar> {
     manifest {
-        attributes["Main-Class"] = "org.univesp.NatalAgapeBackendApplication.kt"
+        attributes["Main-Class"] = "kotlin.org.univesp.natalagapebackend.NatalAgapeBackendApplication.kt"
     }
 }
 
