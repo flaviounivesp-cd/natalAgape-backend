@@ -50,7 +50,7 @@ allOpen {
 
 tasks.withType<Jar> {
     manifest {
-        attributes["Main-Class"] = "kotlin.org.univesp.natalagapebackend.NatalAgapeBackendApplication.kt"
+        attributes["Main-Class"] = "src/main/kotlin/org/univesp/natalagapebackend/NatalAgapeBackendApplication.kt"
     }
 }
 
