@@ -48,6 +48,12 @@ allOpen {
     annotation("jakarta.persistence.Embeddable")
 }
 
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "org.univesp.NatalAgapeBackendApplication.kt"
+    }
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }
