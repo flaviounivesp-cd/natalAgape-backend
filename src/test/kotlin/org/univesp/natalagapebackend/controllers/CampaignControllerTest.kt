@@ -1,8 +1,8 @@
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
+import org.springframework.http.ResponseEntity
 import org.univesp.natalagapebackend.controllers.CampaignController
 import org.univesp.natalagapebackend.models.Campaign
 import org.univesp.natalagapebackend.services.CampaignService
@@ -37,16 +37,16 @@ class CampaignControllerTest {
 
         val result = campaignController.findById(1)
 
-        assertEquals(campaign, result)
+        assertEquals(ResponseEntity.ok(campaign.get()), result)
     }
 
     @Test
     fun findByIdReturnsNullForNonExistentId() {
-        `when`(campaignService.findById(999)).thenReturn(null)
+        `when`(campaignService.findById(999L)).thenReturn(Optional.empty())
 
-        val result = campaignController.findById(999)
+        val result = campaignController.findById(999L)
 
-        assertNull(result)
+        assertEquals(ResponseEntity.notFound().build<Campaign>(), result)
     }
 
     @Test
@@ -61,11 +61,22 @@ class CampaignControllerTest {
 
     @Test
     fun updateModifiesCampaign() {
-        val campaign = Campaign(1, Year.of(2025), "Test 1", 2)
+        val campaign = Campaign(1L, Year.of(2025), "Test 1", 2)
+        `when`(campaignService.findById(1L)).thenReturn(Optional.of(campaign))
         `when`(campaignService.update(campaign)).thenReturn(campaign)
 
-        val result = campaignController.update(campaign)
+        val result = campaignController.update(1L, campaign)
 
-        assertEquals(campaign, result)
+        assertEquals(ResponseEntity.ok(campaign), result)
+    }
+
+    @Test
+    fun updateModifiesCampaignIdNonExistent() {
+        val campaign = Campaign(1L, Year.of(2025), "Test 1", 2)
+        `when`(campaignService.findById(1L)).thenReturn(Optional.empty())
+
+        val result = campaignController.update(999L, campaign)
+
+        assertEquals(ResponseEntity.notFound().build<Campaign>(), result)
     }
 }

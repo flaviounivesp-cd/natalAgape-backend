@@ -1,8 +1,8 @@
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
+import org.springframework.http.ResponseEntity
 import org.univesp.natalagapebackend.controllers.SponsorController
 import org.univesp.natalagapebackend.models.Sponsor
 import org.univesp.natalagapebackend.services.SponsorService
@@ -36,16 +36,16 @@ class SponsorControllerTest {
 
         val result = sponsorController.findById(1)
 
-        assertEquals(sponsor, result)
+        assertEquals(ResponseEntity.ok(sponsor.get()), result)
     }
 
     @Test
     fun findByIdReturnsNullForNonExistentId() {
-        `when`(sponsorService.findById(999)).thenReturn(null)
+        `when`(sponsorService.findById(999L)).thenReturn(Optional.empty())
 
-        val result = sponsorController.findById(999)
+        val result = sponsorController.findById(999L)
 
-        assertNull(result)
+        assertEquals(ResponseEntity.notFound().build<Sponsor>(), result)
     }
 
     @Test
@@ -59,12 +59,24 @@ class SponsorControllerTest {
     }
 
     @Test
-    fun updateModifiesSponsor() {
+    fun updateModifiesSponsorNonExistent() {
         val sponsor = Sponsor(1, "Updated Sponsor", "Phone")
+        `when`(sponsorService.findById(1)).thenReturn(Optional.empty())
         `when`(sponsorService.update(sponsor)).thenReturn(sponsor)
 
-        val result = sponsorController.update(sponsor)
+        val result = sponsorController.update(1L, sponsor)
 
-        assertEquals(sponsor, result)
+        assertEquals(ResponseEntity.notFound().build<Sponsor>(), result)
+    }
+
+    @Test
+    fun updateModifiesSponsor() {
+        val sponsor = Sponsor(1L, "Updated Sponsor", "Phone")
+        `when`(sponsorService.findById(1L)).thenReturn(Optional.of(sponsor))
+        `when`(sponsorService.update(sponsor)).thenReturn(sponsor)
+
+        val result = sponsorController.update(1L, sponsor)
+
+        assertEquals(ResponseEntity.ok(sponsor), result)
     }
 }

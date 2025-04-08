@@ -10,5 +10,4 @@ class LeadershipService(private val leadershipRepository: LeadershipRepository) 
     fun findById(id: Long) = leadershipRepository.findById(id)
     fun save(leadership: Leadership) = leadershipRepository.save(leadership)
     fun update(leadership: Leadership) = leadershipRepository.save(leadership)
-    fun deleteById(id: Long) = leadershipRepository.deleteById(id)
 }
