@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
+import org.springframework.http.ResponseEntity
 import org.univesp.natalagapebackend.controllers.NeighborhoodController
 import org.univesp.natalagapebackend.models.Neighborhood
 import org.univesp.natalagapebackend.services.NeighborhoodService
@@ -31,21 +32,22 @@ class NeighborhoodControllerTest {
 
     @Test
     fun findByIdReturnsNeighborhood() {
-        val neighborhood = Optional.of(Neighborhood(1, "Neighborhood 1"))
-        `when`(neighborhoodService.findById(1)).thenReturn(neighborhood)
+        val neighborhood = Neighborhood(1, "Neighborhood 1")
+        `when`(neighborhoodService.findById(1)).thenReturn(Optional.of(neighborhood))
 
         val result = neighborhoodController.findById(1)
 
-        assertEquals(neighborhood, result)
+        assertEquals(ResponseEntity.ok(neighborhood), result)
     }
 
     @Test
     fun findByIdReturnsNullForNonExistentId() {
-        `when`(neighborhoodService.findById(999)).thenReturn(null)
+        `when`(neighborhoodService.findById(999)).thenReturn(Optional.empty())
 
         val result = neighborhoodController.findById(999)
 
-        assertNull(result)
+        assertEquals(ResponseEntity.notFound().build<Neighborhood>(), result)
+
     }
 
     @Test
@@ -61,10 +63,21 @@ class NeighborhoodControllerTest {
     @Test
     fun updateModifiesNeighborhood() {
         val neighborhood = Neighborhood(1, "Updated Neighborhood")
+        `when`(neighborhoodService.findById(1)).thenReturn(Optional.of(neighborhood))
         `when`(neighborhoodService.update(neighborhood)).thenReturn(neighborhood)
 
-        val result = neighborhoodController.update(neighborhood)
+        val result = neighborhoodController.update(1L, neighborhood)
 
-        assertEquals(neighborhood, result)
+        assertEquals(ResponseEntity.ok(neighborhood), result)
+    }
+
+    @Test
+    fun updateModifiesNeighborhoodNonExistent() {
+        val neighborhood = Neighborhood(1, "Updated Neighborhood")
+        `when`(neighborhoodService.findById(1)).thenReturn(Optional.empty())
+
+        val result = neighborhoodController.update(999L, neighborhood)
+
+        assertEquals(ResponseEntity.notFound().build<Neighborhood>(), result)
     }
 }

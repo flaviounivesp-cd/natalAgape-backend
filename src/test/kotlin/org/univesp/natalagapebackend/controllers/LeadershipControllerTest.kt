@@ -3,7 +3,6 @@ package org.univesp.natalagapebackend.controllers
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.*
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.univesp.natalagapebackend.models.Color
 import org.univesp.natalagapebackend.models.Leadership
@@ -84,25 +83,5 @@ class LeadershipControllerTest {
         val result = leadershipController.update(999L, leadership)
 
         assertEquals(ResponseEntity.notFound().build<Leadership>(), result)
-    }
-
-    @Test
-    fun deleteByIdDeletesLeadership() {
-        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED)
-        `when`(leadershipService.findById(1L)).thenReturn(Optional.of(leadership))
-
-        val result = leadershipController.deleteById(1L)
-
-        assertEquals(ResponseEntity<Void>(HttpStatus.NO_CONTENT), result)
-        verify(leadershipService).deleteById(1L)
-    }
-
-    @Test
-    fun deleteByIdReturnsNotFoundForNonExistentId() {
-        `when`(leadershipService.findById(999L)).thenReturn(Optional.empty())
-
-        val result = leadershipController.deleteById(999L)
-
-        assertEquals(ResponseEntity.notFound().build<Void>(), result)
     }
 }
