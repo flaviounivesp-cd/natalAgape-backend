@@ -4,10 +4,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.springframework.http.ResponseEntity
 import org.univesp.natalagapebackend.controllers.FamilyController
-import org.univesp.natalagapebackend.models.DTO.FamilyDTOInput
-import org.univesp.natalagapebackend.models.DTO.FamilyDTOOutput
-import org.univesp.natalagapebackend.models.DTO.toDTOOutput
-import org.univesp.natalagapebackend.models.DTO.toEntity
+import org.univesp.natalagapebackend.models.DTO.*
 import org.univesp.natalagapebackend.models.Family
 import org.univesp.natalagapebackend.models.Neighborhood
 import org.univesp.natalagapebackend.services.FamilyService
@@ -43,7 +40,7 @@ class FamilyControllerTest {
 
         val result = familyController.findById(1)
 
-        assertEquals(ResponseEntity.ok(family.get().toDTOOutput()), result)
+        assertEquals(ResponseEntity.ok(family.get().toDTOOutputWithNeighborhoodId()), result)
     }
 
     @Test
@@ -58,7 +55,7 @@ class FamilyControllerTest {
     @Test
     fun saveCreatesFamily() {
         val familyInput = FamilyDTOInput(1,"New Family", "123456789", "123 Street", 1, "No observation")
-        val familyOutput = FamilyDTOOutput(1, "New Family", "123456789", "123 Street", "Centro", "No observation")
+        val familyOutput = FamilyDTOOutput(1, "New Family", "123456789", "123 Street", null, "Centro","No observation")
         `when`(familyService.save(familyInput)).thenReturn(familyInput.toEntity(Neighborhood(1, "Centro")))
 
         val result = familyController.save(familyInput)
