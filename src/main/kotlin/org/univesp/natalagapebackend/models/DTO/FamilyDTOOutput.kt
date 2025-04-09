@@ -7,7 +7,8 @@ data class FamilyDTOOutput(
     val responsibleName: String,
     val phoneNumber: String,
     val address: String,
-    val neighborhoodName: String,
+    val neighborhoodId: Long? = null,
+    val neighborhoodName: String? = null,
     val observation: String? = null
 )
 fun Family.toDTOOutput(): FamilyDTOOutput {
@@ -17,6 +18,17 @@ fun Family.toDTOOutput(): FamilyDTOOutput {
         phoneNumber = this.phoneNumber,
         address = this.address,
         neighborhoodName = this.neighborhood.neighborhoodName,
+        observation = this.observation
+    )
+}
+
+fun Family.toDTOOutputWithNeighborhoodId(): FamilyDTOOutput {
+    return FamilyDTOOutput(
+        familyId = this.familyId,
+        responsibleName = this.responsibleName,
+        phoneNumber = this.phoneNumber,
+        address = this.address,
+        neighborhoodId = this.neighborhood.neighborhoodId,
         observation = this.observation
     )
 }

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*
 import org.univesp.natalagapebackend.models.DTO.FamilyDTOInput
 import org.univesp.natalagapebackend.models.DTO.FamilyDTOOutput
 import org.univesp.natalagapebackend.models.DTO.toDTOOutput
+import org.univesp.natalagapebackend.models.DTO.toDTOOutputWithNeighborhoodId
 import org.univesp.natalagapebackend.services.FamilyService
 
 @RestController
@@ -18,7 +19,7 @@ class FamilyController(val familyService: FamilyService) {
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long) : ResponseEntity<FamilyDTOOutput> {
-        return familyService.findById(id).map { it.toDTOOutput() }
+        return familyService.findById(id).map { it.toDTOOutputWithNeighborhoodId()}
                 .map { ResponseEntity.ok(it) }
                 .orElse(ResponseEntity.notFound().build())
     }
