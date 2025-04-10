@@ -13,24 +13,24 @@ import org.univesp.natalagapebackend.services.FamilyService
 class FamilyController(val familyService: FamilyService) {
 
     @GetMapping
-    fun listAll() : List<FamilyDTOOutput> {
+    fun listAll(): List<FamilyDTOOutput> {
         return familyService.listAll().map { it.toDTOOutput() }
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long) : ResponseEntity<FamilyDTOOutput> {
-        return familyService.findById(id).map { it.toDTOOutputWithNeighborhoodId()}
-                .map { ResponseEntity.ok(it) }
-                .orElse(ResponseEntity.notFound().build())
+    fun findById(@PathVariable id: Long): ResponseEntity<FamilyDTOOutput>? {
+        return familyService.findById(id).map { it.toDTOOutputWithNeighborhoodId() }
+            .map { ResponseEntity.ok(it) }
+            .orElse(ResponseEntity.notFound().build())
     }
 
     @PostMapping
-    fun save(@RequestBody family: FamilyDTOInput) : FamilyDTOOutput {
-      return familyService.save(family).toDTOOutput()
+    fun save(@RequestBody family: FamilyDTOInput): FamilyDTOOutput {
+        return familyService.save(family).toDTOOutput()
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody updatedFamily: FamilyDTOInput) : ResponseEntity<FamilyDTOOutput> {
+    fun update(@PathVariable id: Long, @RequestBody updatedFamily: FamilyDTOInput): ResponseEntity<FamilyDTOOutput> {
         return familyService.findById(id)
             .map { existingFamily ->
                 val familyToUpdate = updatedFamily.copy(familyId = existingFamily.familyId)
@@ -38,5 +38,15 @@ class FamilyController(val familyService: FamilyService) {
                 ResponseEntity.ok(updatedEntity.toDTOOutput())
             }
             .orElse(ResponseEntity.notFound().build())
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteFamily(@PathVariable id: Long): ResponseEntity<Void> {
+        return if (familyService.findById(id).isPresent) {
+            familyService.deleteFamily(id)
+            ResponseEntity.noContent().build()
+        } else {
+            ResponseEntity.notFound().build()
+        }
     }
 }

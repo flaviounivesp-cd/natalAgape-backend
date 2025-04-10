@@ -9,25 +9,27 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrElse
 
 @Service
-class FamilyService( private val familyRepository: FamilyRepository,
-                     private val neighborhoodService: NeighborhoodService) {
+class FamilyService(
+    private val familyRepository: FamilyRepository,
+    private val neighborhoodService: NeighborhoodService
+) {
 
     fun listAll() = familyRepository.findAll()
 
     fun findById(id: Long): Optional<Family> = familyRepository.findById(id)
 
-    fun save(familyDTO: FamilyDTOInput) : Family {
+    fun save(familyDTO: FamilyDTOInput): Family {
 
-         val neighborhood = neighborhoodService.findById(familyDTO.neighborhoodId).getOrElse {
+        val neighborhood = neighborhoodService.findById(familyDTO.neighborhoodId).getOrElse {
             throw IllegalArgumentException("Neighborhood not found")
-         }
+        }
 
         return familyRepository.save(familyDTO.toEntity(neighborhood))
     }
 
-    fun update(familyDTO: FamilyDTOInput) : Family {
+    fun update(familyDTO: FamilyDTOInput): Family {
 
-       return familyRepository.findById(familyDTO.familyId!!).map { existingFamily ->
+        return familyRepository.findById(familyDTO.familyId!!).map { existingFamily ->
             val newNeighborhood = neighborhoodService.findById(familyDTO.neighborhoodId).getOrElse {
                 throw IllegalArgumentException("Neighborhood not found")
             }
@@ -39,8 +41,11 @@ class FamilyService( private val familyRepository: FamilyRepository,
                 neighborhood = newNeighborhood,
                 observation = familyDTO.observation
             )
-           familyRepository.save(familyToUpdate)
+            familyRepository.save(familyToUpdate)
 
         }.orElseThrow { IllegalArgumentException("Family not found") }
     }
+ fun deleteFamily(familyId: Long) {
+     familyRepository.deleteById(familyId)
+ }
 }
