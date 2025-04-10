@@ -1,6 +1,5 @@
 package org.univesp.natalagapebackend.controllers
 
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.univesp.natalagapebackend.models.Leadership
@@ -27,14 +26,6 @@ class LeadershipController(val leadershipService: LeadershipService) {
     fun update(@PathVariable id: Long, @RequestBody updatedLeadership: Leadership): ResponseEntity<Leadership> {
         return leadershipService.findById(id).map { _ ->
             ResponseEntity.ok(leadershipService.update(updatedLeadership))
-        }.orElse(ResponseEntity.notFound().build())
-    }
-
-    @DeleteMapping("/{id}")
-    fun deleteById(@PathVariable id: Long): ResponseEntity<Void> {
-        return leadershipService.findById(id).map { leadership ->
-            leadershipService.deleteById(leadership.leaderId)
-            ResponseEntity<Void>(HttpStatus.NO_CONTENT)
         }.orElse(ResponseEntity.notFound().build())
     }
 }

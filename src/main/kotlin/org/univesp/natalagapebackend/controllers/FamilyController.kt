@@ -2,42 +2,47 @@ package org.univesp.natalagapebackend.controllers
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.univesp.natalagapebackend.models.Family
+import org.univesp.natalagapebackend.models.DTO.FamilyDTOInput
+import org.univesp.natalagapebackend.models.DTO.FamilyDTOOutput
+import org.univesp.natalagapebackend.models.DTO.toDTOOutput
+import org.univesp.natalagapebackend.models.DTO.toDTOOutputWithNeighborhoodId
 import org.univesp.natalagapebackend.services.FamilyService
 
 @RestController
-@RequestMapping("/families")
-class FamilyController(private val familyService: FamilyService) {
+@RequestMapping("api/family")
+class FamilyController(val familyService: FamilyService) {
 
     @GetMapping
-    fun getAllFamilies(): List<Family> = familyService.getAllFamilies()
+    fun listAll(): List<FamilyDTOOutput> {
+        return familyService.listAll().map { it.toDTOOutput() }
+    }
 
     @GetMapping("/{id}")
-    fun getFamilyById(@PathVariable id: Long): ResponseEntity<Family> {
-        val family = familyService.getFamilyById(id)
-        return if (family.isPresent) {
-            ResponseEntity.ok(family.get())
-        } else {
-            ResponseEntity.notFound().build()
-        }
+    fun findById(@PathVariable id: Long): ResponseEntity<FamilyDTOOutput>? {
+        return familyService.findById(id).map { it.toDTOOutputWithNeighborhoodId() }
+            .map { ResponseEntity.ok(it) }
+            .orElse(ResponseEntity.notFound().build())
     }
 
     @PostMapping
-    fun createFamily(@RequestBody family: Family): Family = familyService.createFamily(family)
+    fun save(@RequestBody family: FamilyDTOInput): FamilyDTOOutput {
+        return familyService.save(family).toDTOOutput()
+    }
 
     @PutMapping("/{id}")
-    fun updateFamily(@PathVariable id: Long, @RequestBody updatedFamily: Family): ResponseEntity<Family> {
-        val family = familyService.updateFamily(id, updatedFamily)
-        return if (family.isPresent) {
-            ResponseEntity.ok(family.get())
-        } else {
-            ResponseEntity.notFound().build()
-        }
+    fun update(@PathVariable id: Long, @RequestBody updatedFamily: FamilyDTOInput): ResponseEntity<FamilyDTOOutput> {
+        return familyService.findById(id)
+            .map { existingFamily ->
+                val familyToUpdate = updatedFamily.copy(familyId = existingFamily.familyId)
+                val updatedEntity = familyService.update(familyToUpdate)
+                ResponseEntity.ok(updatedEntity.toDTOOutput())
+            }
+            .orElse(ResponseEntity.notFound().build())
     }
 
     @DeleteMapping("/{id}")
     fun deleteFamily(@PathVariable id: Long): ResponseEntity<Void> {
-        return if (familyService.getFamilyById(id).isPresent) {
+        return if (familyService.findById(id).isPresent) {
             familyService.deleteFamily(id)
             ResponseEntity.noContent().build()
         } else {

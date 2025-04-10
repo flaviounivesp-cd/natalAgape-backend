@@ -16,7 +16,7 @@ class ChildService(private val childRepository: ChildRepository, private val fam
     fun findById(id: Long): Optional<Child> = childRepository.findById(id)
 
     fun save(childRequest: ChildRequest): Child {
-        val family = familyService.getFamilyById(childRequest.familyId).getOrElse {
+        val family = familyService.findById(childRequest.familyId).getOrElse {
             throw IllegalArgumentException("Family not found")
         }
         return childRepository.save(childRequest.toEntity(family))
@@ -24,7 +24,7 @@ class ChildService(private val childRepository: ChildRepository, private val fam
 
     fun update(childRequest: ChildRequest): Child {
         return childRepository.findById(childRequest.childId).map { existingChild ->
-            val family = familyService.getFamilyById(childRequest.familyId).getOrElse {
+            val family = familyService.findById(childRequest.familyId).getOrElse {
                 throw IllegalArgumentException("Family not found")
             }
             val childToUpdate = Child(

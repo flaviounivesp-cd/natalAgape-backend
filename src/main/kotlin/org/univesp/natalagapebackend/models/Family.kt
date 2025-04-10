@@ -19,14 +19,17 @@ data class Family(
     val phoneNumber: String,
 
     @Column(nullable = false)
-    val neighborhood: String,
+    val address: String,
 
+    @ManyToOne
+    val neighborhood: Neighborhood,
+
+    @Column(nullable = true)
     val observation: String? = null,
-
+    @Column(nullable = true)
     val pictureUrl: String? = null,
 
     @JsonIgnore
     @OneToMany(mappedBy = "family", cascade = [CascadeType.ALL], orphanRemoval = true)
     var children: MutableList<Child>? = mutableListOf()
-
 )

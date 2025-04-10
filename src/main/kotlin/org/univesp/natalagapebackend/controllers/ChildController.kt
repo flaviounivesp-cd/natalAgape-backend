@@ -29,7 +29,7 @@ class ChildController(
 
     @PostMapping
     fun save(@RequestBody childRequest: ChildRequest): ResponseEntity<ChildResponse> {
-        val family = familyService.getFamilyById(childRequest.familyId)
+        val family = familyService.findById(childRequest.familyId)
             .orElseThrow { RuntimeException("Family not found") }
         return ResponseEntity.ok(childService.save(childRequest).toResponse(family))
     }
@@ -43,7 +43,7 @@ class ChildController(
 
                 val updatedEntity = childService.update(childToUpdate)
 
-                val family = familyService.getFamilyById(updatedChild.familyId)
+                val family = familyService.findById(updatedChild.familyId)
                     .orElseThrow { RuntimeException("Family not found") }
 
 

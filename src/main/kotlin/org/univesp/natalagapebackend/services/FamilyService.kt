@@ -1,36 +1,51 @@
 package org.univesp.natalagapebackend.services
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.univesp.natalagapebackend.models.Family
+import org.univesp.natalagapebackend.models.DTO.FamilyDTOInput
+import org.univesp.natalagapebackend.models.DTO.toEntity
 import org.univesp.natalagapebackend.repositories.FamilyRepository
-import java.util.*
+import java.util.Optional
+import kotlin.jvm.optionals.getOrElse
 
 @Service
-class FamilyService @Autowired constructor(
-    private val familyRepository: FamilyRepository
+class FamilyService(
+    private val familyRepository: FamilyRepository,
+    private val neighborhoodService: NeighborhoodService
 ) {
 
-    fun getAllFamilies(): List<Family> = familyRepository.findAll()
+    fun listAll() = familyRepository.findAll()
 
-    fun getFamilyById(familyId: Long): Optional<Family> = familyRepository.findById(familyId)
+    fun findById(id: Long): Optional<Family> = familyRepository.findById(id)
 
-    fun createFamily(family: Family): Family = familyRepository.save(family)
+    fun save(familyDTO: FamilyDTOInput): Family {
 
-    fun updateFamily(familyId: Long, updatedFamily: Family): Optional<Family> {
-        return familyRepository.findById(familyId).map { existingFamily ->
-            val familyToUpdate = existingFamily.copy(
-                responsibleName = updatedFamily.responsibleName,
-                phoneNumber = updatedFamily.phoneNumber,
-                neighborhood = updatedFamily.neighborhood,
-                observation = updatedFamily.observation,
-                pictureUrl = updatedFamily.pictureUrl
+        val neighborhood = neighborhoodService.findById(familyDTO.neighborhoodId).getOrElse {
+            throw IllegalArgumentException("Neighborhood not found")
+        }
+
+        return familyRepository.save(familyDTO.toEntity(neighborhood))
+    }
+
+    fun update(familyDTO: FamilyDTOInput): Family {
+
+        return familyRepository.findById(familyDTO.familyId!!).map { existingFamily ->
+            val newNeighborhood = neighborhoodService.findById(familyDTO.neighborhoodId).getOrElse {
+                throw IllegalArgumentException("Neighborhood not found")
+            }
+            val familyToUpdate = Family(
+                familyId = existingFamily.familyId,
+                responsibleName = familyDTO.responsibleName,
+                phoneNumber = familyDTO.phoneNumber,
+                address = familyDTO.address,
+                neighborhood = newNeighborhood,
+                observation = familyDTO.observation
             )
             familyRepository.save(familyToUpdate)
-        }
-    }
 
-    fun deleteFamily(familyId: Long) {
-        familyRepository.deleteById(familyId)
+        }.orElseThrow { IllegalArgumentException("Family not found") }
     }
+ fun deleteFamily(familyId: Long) {
+     familyRepository.deleteById(familyId)
+ }
 }
