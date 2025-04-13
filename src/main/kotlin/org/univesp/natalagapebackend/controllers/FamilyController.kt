@@ -2,24 +2,30 @@ package org.univesp.natalagapebackend.controllers
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.univesp.natalagapebackend.models.DTO.FamilyDTOInput
-import org.univesp.natalagapebackend.models.DTO.FamilyDTOOutput
-import org.univesp.natalagapebackend.models.DTO.toDTOOutput
-import org.univesp.natalagapebackend.models.DTO.toDTOOutputWithNeighborhoodId
+import org.univesp.natalagapebackend.models.DTO.*
+import org.univesp.natalagapebackend.services.ChildService
 import org.univesp.natalagapebackend.services.FamilyService
 
 @RestController
 @RequestMapping("api/family")
-class FamilyController(val familyService: FamilyService) {
+class FamilyController(
+    val familyService: FamilyService,
+    val childService: ChildService
+) {
 
     @GetMapping
-    fun listAll(): List<FamilyDTOOutput> {
-        return familyService.listAll().map { it.toDTOOutput() }
+    fun listAll(): List<FamilyWithChildrenDTO> {
+        return familyService.listAll().map { family ->
+            val children = childService.findByFamilyId(family.familyId)
+            toDTOOutput(family, children)
+        }
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): ResponseEntity<FamilyDTOOutput>? {
-        return familyService.findById(id).map { it.toDTOOutputWithNeighborhoodId() }
+    fun findById(@PathVariable id: Long): ResponseEntity<FamilyWithChildrenDTO>? {
+        return familyService.findById(id).map { family ->
+            val children = childService.findByFamilyId(family.familyId)
+            toDTOOutput(family, children) }
             .map { ResponseEntity.ok(it) }
             .orElse(ResponseEntity.notFound().build())
     }
