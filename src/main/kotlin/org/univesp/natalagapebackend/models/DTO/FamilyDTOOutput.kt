@@ -22,14 +22,3 @@ fun Family.toDTOOutput(): FamilyDTOOutput {
         observation = this.observation
     )
 }
-
-fun Family.toDTOOutputWithNeighborhoodId(): FamilyDTOOutput {
-    return FamilyDTOOutput(
-        familyId = this.familyId,
-        responsibleName = this.responsibleName,
-        phoneNumber = this.phoneNumber,
-        address = this.address,
-        neighborhoodId = this.neighborhood.neighborhoodId,
-        observation = this.observation
-    )
-}
