@@ -14,7 +14,10 @@ class UploadController(private val googleDriveService: GoogleDriveService) {
     fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
         return try {
             val fileId = googleDriveService.uploadFile(file)
-            ResponseEntity.ok("File uploaded successfully. File ID: $fileId")
+
+
+
+            ResponseEntity.ok(fileId)
         } catch (e: Exception) {
             ResponseEntity.internalServerError().body("Error uploading file: ${e.message}")
         }
