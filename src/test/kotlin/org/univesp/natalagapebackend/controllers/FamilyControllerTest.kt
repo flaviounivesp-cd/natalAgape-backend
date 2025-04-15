@@ -48,7 +48,7 @@ class FamilyControllerTest {
                 responsibleName = "Family 1",
                 phoneNumber = "123456789",
                 address = "123 Street",
-                neighborhoodName = "Centro",
+                neighborhoodId = 1,
                 observation = "No observation",
                 children = listOf(
                     Children(
@@ -67,7 +67,7 @@ class FamilyControllerTest {
                 responsibleName = "Family 2",
                 phoneNumber = "123456789",
                 address = "123 Street",
-                neighborhoodName = "Centro",
+                neighborhoodId = 1,
                 observation = "No observation",
                 children = emptyList()
             )
@@ -102,7 +102,7 @@ class FamilyControllerTest {
                 responsibleName = "Family 1",
                 phoneNumber = "123456789",
                 address = "123 Street",
-                neighborhoodName = "Centro",
+                neighborhoodId = 1,
                 observation = "No observation",
                 children = children.map {
                     Children(

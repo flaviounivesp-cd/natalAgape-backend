@@ -9,7 +9,7 @@ data class FamilyWithChildrenDTO(
     val responsibleName: String,
     val phoneNumber: String,
     val address: String,
-    val neighborhoodName: String,
+    val neighborhoodId: Long,
     val observation: String? = null,
     val children: List<Children>? = null
 )
@@ -30,7 +30,7 @@ fun toDTOOutput(family: Family, children: List<Child>? ): FamilyWithChildrenDTO 
         responsibleName = family.responsibleName,
         phoneNumber = family.phoneNumber,
         address = family.address,
-        neighborhoodName = family.neighborhood.neighborhoodName,
+        neighborhoodId = family.neighborhood.neighborhoodId,
         observation = family.observation,
         children = children?.map {
             Children(
