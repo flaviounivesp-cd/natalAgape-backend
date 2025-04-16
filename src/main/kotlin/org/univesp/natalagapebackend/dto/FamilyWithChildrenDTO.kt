@@ -1,4 +1,4 @@
-package org.univesp.natalagapebackend.models.DTO
+package org.univesp.natalagapebackend.dto
 
 import org.univesp.natalagapebackend.models.Child
 import org.univesp.natalagapebackend.models.Family
@@ -10,6 +10,7 @@ data class FamilyWithChildrenDTO(
     val phoneNumber: String,
     val address: String,
     val neighborhoodId: Long,
+    val neighborhoodName: String,
     val observation: String? = null,
     val children: List<Children>? = null
 )
@@ -31,6 +32,7 @@ fun toDTOOutput(family: Family, children: List<Child>? ): FamilyWithChildrenDTO 
         phoneNumber = family.phoneNumber,
         address = family.address,
         neighborhoodId = family.neighborhood.neighborhoodId,
+        neighborhoodName = family.neighborhood.neighborhoodName,
         observation = family.observation,
         children = children?.map {
             Children(

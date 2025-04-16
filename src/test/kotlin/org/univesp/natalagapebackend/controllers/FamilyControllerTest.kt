@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.springframework.http.ResponseEntity
 import org.univesp.natalagapebackend.controllers.FamilyController
+import org.univesp.natalagapebackend.dto.*
 import org.univesp.natalagapebackend.models.Child
-import org.univesp.natalagapebackend.models.DTO.*
 import org.univesp.natalagapebackend.models.Family
 import org.univesp.natalagapebackend.models.Neighborhood
 import org.univesp.natalagapebackend.services.ChildService

@@ -1,4 +1,4 @@
-package org.univesp.natalagapebackend.models.DTO
+package org.univesp.natalagapebackend.dto
 
 import org.univesp.natalagapebackend.models.Family
 

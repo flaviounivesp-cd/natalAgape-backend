@@ -2,7 +2,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
-import org.univesp.natalagapebackend.models.DTO.FamilyDTOInput
+import org.univesp.natalagapebackend.dto.FamilyDTOInput
 import org.univesp.natalagapebackend.models.Family
 import org.univesp.natalagapebackend.models.Neighborhood
 import org.univesp.natalagapebackend.repositories.FamilyRepository

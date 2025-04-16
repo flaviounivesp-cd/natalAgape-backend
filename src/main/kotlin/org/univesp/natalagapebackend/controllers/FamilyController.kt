@@ -2,7 +2,10 @@ package org.univesp.natalagapebackend.controllers
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.univesp.natalagapebackend.models.DTO.*
+import org.univesp.natalagapebackend.dto.FamilyDTOInput
+import org.univesp.natalagapebackend.dto.FamilyDTOOutput
+import org.univesp.natalagapebackend.dto.FamilyWithChildrenDTO
+import org.univesp.natalagapebackend.dto.toDTOOutput
 import org.univesp.natalagapebackend.services.ChildService
 import org.univesp.natalagapebackend.services.FamilyService
 
