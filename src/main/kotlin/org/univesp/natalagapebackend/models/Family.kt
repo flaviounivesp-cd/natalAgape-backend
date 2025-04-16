@@ -9,16 +9,20 @@ import lombok.Data
 data class Family(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val familyId: Long,
+    val familyId: Long = 0,
+
     @Column(nullable = false)
     val responsibleName: String,
+
     @Column(nullable = false)
     val phoneNumber: String,
+
     @Column(nullable = false)
     val address: String,
+
     @ManyToOne
     val neighborhood: Neighborhood,
+
     @Column(nullable = true)
     val observation: String? = null,
 )
-

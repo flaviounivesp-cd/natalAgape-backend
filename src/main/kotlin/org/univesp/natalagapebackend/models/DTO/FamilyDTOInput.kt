@@ -1,5 +1,6 @@
 package org.univesp.natalagapebackend.models.DTO
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.univesp.natalagapebackend.models.Family
 import org.univesp.natalagapebackend.models.Neighborhood
 
