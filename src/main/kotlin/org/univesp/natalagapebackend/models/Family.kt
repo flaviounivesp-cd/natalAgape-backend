@@ -1,6 +1,5 @@
 package org.univesp.natalagapebackend.models
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import lombok.Data
 
@@ -26,10 +25,8 @@ data class Family(
 
     @Column(nullable = true)
     val observation: String? = null,
-    @Column(nullable = true)
-    val pictureUrl: String? = null,
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "family", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var children: MutableList<Child>? = mutableListOf()
+    @ManyToOne
+    @JoinColumn(name = "leader_id")
+    var leader: Leadership? // Alterado de leaderId para leader
 )

@@ -6,6 +6,7 @@ import org.univesp.natalagapebackend.models.DTO.FamilyDTOInput
 import org.univesp.natalagapebackend.models.DTO.FamilyDTOOutput
 import org.univesp.natalagapebackend.models.DTO.toDTOOutput
 import org.univesp.natalagapebackend.models.DTO.toDTOOutputWithNeighborhoodId
+import org.univesp.natalagapebackend.models.Family
 import org.univesp.natalagapebackend.services.FamilyService
 
 @RestController
@@ -13,20 +14,22 @@ import org.univesp.natalagapebackend.services.FamilyService
 class FamilyController(val familyService: FamilyService) {
 
     @GetMapping
-    fun listAll(): List<FamilyDTOOutput> {
-        return familyService.listAll().map { it.toDTOOutput() }
+    fun listAll(): List<Family> {
+        return familyService.listAll()
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): ResponseEntity<FamilyDTOOutput>? {
-        return familyService.findById(id).map { it.toDTOOutputWithNeighborhoodId() }
-            .map { ResponseEntity.ok(it) }
-            .orElse(ResponseEntity.notFound().build())
+    fun findById(@PathVariable id: Long): ResponseEntity<Family>? {
+        return familyService.findById(id).map { family ->
+            ResponseEntity.ok(family)
+        }.orElse(ResponseEntity.notFound().build())
     }
 
     @PostMapping
-    fun save(@RequestBody family: FamilyDTOInput): FamilyDTOOutput {
-        return familyService.save(family).toDTOOutput()
+    fun save(@RequestBody familyDTO: FamilyDTOInput): ResponseEntity<FamilyDTOOutput> {
+        val preparedFamily = familyService.validateAndPrepareFamily(familyDTO)
+        val savedFamily = familyService.save(preparedFamily)
+        return ResponseEntity.ok(savedFamily.toDTOOutputWithNeighborhoodId())
     }
 
     @PutMapping("/{id}")

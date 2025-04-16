@@ -1,6 +1,5 @@
 package org.univesp.natalagapebackend.models
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import lombok.Data
 import java.time.LocalDate
@@ -28,9 +27,8 @@ data class Child(
 
     val pictureUrl: String? = null,
 
-
     @ManyToOne
-    @JoinColumn(name = "family_id", nullable = false)
-    @JsonIgnore
-    var family: Family? = null
+    @JoinColumn(name = "family_id")
+    var family: Family
+
 )

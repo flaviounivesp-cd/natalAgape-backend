@@ -1,8 +1,9 @@
 package org.univesp.natalagapebackend.models.DTO
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import org.univesp.natalagapebackend.models.Family
+import org.univesp.natalagapebackend.models.Leadership
 import org.univesp.natalagapebackend.models.Neighborhood
+import java.util.*
 
 data class FamilyDTOInput(
     val familyId: Long? = null,
@@ -10,16 +11,18 @@ data class FamilyDTOInput(
     val phoneNumber: String,
     val address: String,
     val neighborhoodId: Long,
-    val observation: String? = null
+    val observation: String? = null,
+    val leaderId: Long? = null
 )
 
-fun FamilyDTOInput.toEntity(neighborhood: Neighborhood): Family {
+fun FamilyDTOInput.toEntity(neighborhood: Optional<Neighborhood>, leadership: Leadership?): Family {
     return Family(
         familyId = this.familyId ?: 0,
         responsibleName = this.responsibleName,
         phoneNumber = this.phoneNumber,
         address = this.address,
-        neighborhood = neighborhood,
-        observation = this.observation
+        neighborhood = neighborhood.get(),
+        observation = this.observation,
+        leader = leadership
     )
 }

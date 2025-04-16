@@ -2,7 +2,10 @@ package org.univesp.natalagapebackend.controllers
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.univesp.natalagapebackend.models.Leadership
+import org.univesp.natalagapebackend.models.DTO.LeadershipDTO
+import org.univesp.natalagapebackend.models.DTO.toDTO
+import org.univesp.natalagapebackend.models.DTO.toEntity
+
 import org.univesp.natalagapebackend.services.LeadershipService
 
 @RestController
@@ -10,22 +13,37 @@ import org.univesp.natalagapebackend.services.LeadershipService
 class LeadershipController(val leadershipService: LeadershipService) {
 
     @GetMapping
-    fun listAll(): List<Leadership> = leadershipService.listAll()
+    fun getAllLeaderships(): ResponseEntity<List<LeadershipDTO>> {
+        val leaderships = leadershipService.getAllLeaderships()
+        return ResponseEntity.ok(leaderships.map { it.toDTO() })
+    }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): ResponseEntity<Leadership> {
-        return leadershipService.findById(id).map { leadership ->
-            ResponseEntity.ok(leadership)
-        }.orElse(ResponseEntity.notFound().build())
+    fun findById(@PathVariable id: Long): ResponseEntity<LeadershipDTO> {
+        val leadership = leadershipService.findById(id)
+        return if (leadership != null) {
+            ResponseEntity.ok(leadership.toDTO())
+        } else {
+            ResponseEntity.notFound().build()
+        }
     }
 
     @PostMapping
-    fun save(@RequestBody leadership: Leadership): Leadership = leadershipService.save(leadership)
+    fun save(@RequestBody leadershipDTO: LeadershipDTO): ResponseEntity<LeadershipDTO> {
+        val saved = leadershipService.save(leadershipDTO.toEntity())
+        return ResponseEntity.ok(saved.toDTO())
+    }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody updatedLeadership: Leadership): ResponseEntity<Leadership> {
-        return leadershipService.findById(id).map { _ ->
-            ResponseEntity.ok(leadershipService.update(updatedLeadership))
-        }.orElse(ResponseEntity.notFound().build())
+    fun update(@PathVariable id: Long, @RequestBody leadershipDTO: LeadershipDTO): ResponseEntity<LeadershipDTO> {
+        if (leadershipDTO.leaderId != id) {
+            return ResponseEntity.badRequest().build()
+        }
+
+        val existingLeadership = leadershipService.findById(id)
+            ?: return ResponseEntity.notFound().build()
+
+        val updated = leadershipService.update(leadershipDTO.toEntity())
+        return ResponseEntity.ok(updated.toDTO())
     }
 }
