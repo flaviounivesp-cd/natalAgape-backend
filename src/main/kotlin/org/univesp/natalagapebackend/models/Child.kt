@@ -30,5 +30,4 @@ data class Child(
     @ManyToOne
     @JoinColumn(name = "family_id")
     var family: Family
-
 )

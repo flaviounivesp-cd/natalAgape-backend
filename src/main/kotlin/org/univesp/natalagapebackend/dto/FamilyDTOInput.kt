@@ -1,9 +1,10 @@
-package org.univesp.natalagapebackend.models.DTO
+package org.univesp.natalagapebackend.dto
 
 import org.univesp.natalagapebackend.models.Family
 import org.univesp.natalagapebackend.models.Leadership
 import org.univesp.natalagapebackend.models.Neighborhood
 import java.util.*
+import kotlin.jvm.optionals.getOrElse
 
 data class FamilyDTOInput(
     val familyId: Long? = null,

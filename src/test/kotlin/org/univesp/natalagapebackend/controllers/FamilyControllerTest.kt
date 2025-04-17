@@ -4,43 +4,130 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.springframework.http.ResponseEntity
 import org.univesp.natalagapebackend.controllers.FamilyController
-import org.univesp.natalagapebackend.models.DTO.*
+import org.univesp.natalagapebackend.dto.*
+import org.univesp.natalagapebackend.models.Child
 import org.univesp.natalagapebackend.models.Family
 import org.univesp.natalagapebackend.models.Neighborhood
+import org.univesp.natalagapebackend.services.ChildService
 import org.univesp.natalagapebackend.services.FamilyService
+import java.time.LocalDate
 import java.util.*
 
 class FamilyControllerTest {
 
     private lateinit var familyService: FamilyService
+    private lateinit var childService: ChildService
     private lateinit var familyController: FamilyController
 
     @BeforeEach
     fun setUp() {
         familyService = mock(FamilyService::class.java)
-        familyController = FamilyController(familyService)
+        childService = mock(ChildService::class.java)
+        familyController = FamilyController(familyService, childService)
     }
 
     @Test
-    fun listAllReturnsFamilies() {
-        val families = listOf(
-        Family(1, "Family 1","123456789", "123 Street", Neighborhood(1, "Centro"), "No observation"),
-        Family(2, "Family 2", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation"))
+    fun listAllReturnsFamiliesWithChildren() {
+        val family01 = Family(1, "Family 1", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation")
+        val family02 = Family(2, "Family 2", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation")
+
+        val child = Child(
+            1, "name", "Male", LocalDate.now(), "", "", null, family01
+        )
+
+        val families = listOf(family01, family02)
         `when`(familyService.listAll()).thenReturn(families)
+        `when`(childService.findByFamilyId(family01.familyId)).thenReturn(listOf(child))
+        `when`(childService.findByFamilyId(family02.familyId)).thenReturn(emptyList())
 
         val result = familyController.listAll()
 
-        assertEquals(families.map { it.toDTOOutput() }, result)
+        val expected = listOf(
+            FamilyWithChildrenDTO(
+                familyId = 1,
+                responsibleName = "Family 1",
+                phoneNumber = "123456789",
+                address = "123 Street",
+                neighborhoodId = 1,
+                observation = "No observation",
+                children = listOf(
+                    Children(
+                        childId = 1,
+                        childName = "name",
+                        gender = "Male",
+                        birthDate = LocalDate.now(),
+                        clothes = "",
+                        shoes = "",
+                        pictureUrl = null
+                    )
+                )
+            ),
+            FamilyWithChildrenDTO(
+                familyId = 2,
+                responsibleName = "Family 2",
+                phoneNumber = "123456789",
+                address = "123 Street",
+                neighborhoodId = 1,
+                observation = "No observation",
+                children = emptyList()
+            )
+        )
+
+        assertEquals(expected, result)
     }
 
     @Test
-    fun findByIdReturnsFamily() {
-        val family = Optional.of(Family(1, "Family 1", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation"))
-        `when`(familyService.findById(1)).thenReturn(family)
+    fun listAllReturnsEmptyListWhenNoFamiliesExist() {
+        `when`(familyService.listAll()).thenReturn(emptyList())
+
+        val result = familyController.listAll()
+
+        assertEquals(emptyList<FamilyWithChildrenDTO>(), result)
+    }
+
+    @Test
+    fun findByIdReturnsFamilyWithChildren() {
+        val family = Family(1, "Family 1", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation")
+        val children = listOf(
+            Child(1, "Child 1", "Male", LocalDate.now(), "Clothes", "Shoes", null, family)
+        )
+        `when`(familyService.findById(1)).thenReturn(Optional.of(family))
+        `when`(childService.findByFamilyId(1)).thenReturn(children)
 
         val result = familyController.findById(1)
 
-        assertEquals(ResponseEntity.ok(family.get().toDTOOutputWithNeighborhoodId()), result)
+        val expected = ResponseEntity.ok(
+            FamilyWithChildrenDTO(
+                familyId = 1,
+                responsibleName = "Family 1",
+                phoneNumber = "123456789",
+                address = "123 Street",
+                neighborhoodId = 1,
+                observation = "No observation",
+                children = children.map {
+                    Children(
+                        childId = it.childId,
+                        childName = it.childName,
+                        gender = it.gender,
+                        birthDate = it.birthDate,
+                        clothes = it.clothes,
+                        shoes = it.shoes,
+                        pictureUrl = it.pictureUrl
+                    )
+                }
+            )
+        )
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun findByIdReturnsNotFoundWhenFamilyDoesNotExist() {
+        `when`(familyService.findById(999)).thenReturn(Optional.empty())
+
+        val result = familyController.findById(999)
+
+        assertEquals(ResponseEntity.notFound().build<FamilyWithChildrenDTO>(), result)
     }
 
     @Test

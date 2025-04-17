@@ -2,34 +2,43 @@ package org.univesp.natalagapebackend.controllers
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.univesp.natalagapebackend.models.DTO.FamilyDTOInput
+import org.univesp.natalagapebackend.dto.FamilyDTOInput
+
+import org.univesp.natalagapebackend.dto.FamilyWithChildrenDTO
+import org.univesp.natalagapebackend.dto.toDTOOutput
 import org.univesp.natalagapebackend.models.DTO.FamilyDTOOutput
 import org.univesp.natalagapebackend.models.DTO.toDTOOutput
-import org.univesp.natalagapebackend.models.DTO.toDTOOutputWithNeighborhoodId
 import org.univesp.natalagapebackend.models.Family
+import org.univesp.natalagapebackend.services.ChildService
 import org.univesp.natalagapebackend.services.FamilyService
 
 @RestController
 @RequestMapping("api/family")
-class FamilyController(val familyService: FamilyService) {
+class FamilyController(
+    val familyService: FamilyService,
+    val childService: ChildService
+) {
 
     @GetMapping
-    fun listAll(): List<Family> {
-        return familyService.listAll()
+    fun listAll(): List<FamilyWithChildrenDTO> {
+        return familyService.listAll().map { family ->
+            val children = childService.findByFamilyId(family.familyId)
+            toDTOOutput(family, children)
+        }
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): ResponseEntity<Family>? {
+    fun findById(@PathVariable id: Long): ResponseEntity<FamilyWithChildrenDTO>? {
         return familyService.findById(id).map { family ->
-            ResponseEntity.ok(family)
-        }.orElse(ResponseEntity.notFound().build())
+            val children = childService.findByFamilyId(family.familyId)
+            toDTOOutput(family, children) }
+            .map { ResponseEntity.ok(it) }
+            .orElse(ResponseEntity.notFound().build())
     }
 
     @PostMapping
-    fun save(@RequestBody familyDTO: FamilyDTOInput): ResponseEntity<FamilyDTOOutput> {
-        val preparedFamily = familyService.validateAndPrepareFamily(familyDTO)
-        val savedFamily = familyService.save(preparedFamily)
-        return ResponseEntity.ok(savedFamily.toDTOOutputWithNeighborhoodId())
+    fun save(@RequestBody family: Family): FamilyDTOOutput {
+        return familyService.save(family).toDTOOutput()
     }
 
     @PutMapping("/{id}")

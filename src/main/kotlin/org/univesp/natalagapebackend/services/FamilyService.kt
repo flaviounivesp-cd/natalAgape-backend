@@ -2,8 +2,8 @@ package org.univesp.natalagapebackend.services
 
 import org.springframework.stereotype.Service
 import org.univesp.natalagapebackend.models.Family
-import org.univesp.natalagapebackend.models.DTO.FamilyDTOInput
-import org.univesp.natalagapebackend.models.DTO.toEntity
+import org.univesp.natalagapebackend.dto.FamilyDTOInput
+import org.univesp.natalagapebackend.dto.toEntity
 import org.univesp.natalagapebackend.repositories.FamilyRepository
 import java.util.Optional
 import kotlin.jvm.optionals.getOrElse

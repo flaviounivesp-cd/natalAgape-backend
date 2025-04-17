@@ -15,6 +15,11 @@ class ChildService(private val childRepository: ChildRepository, private val fam
 
     fun findById(id: Long): Optional<Child> = childRepository.findById(id)
 
+    fun findByFamilyId(familyId: Long): List<Child>? {
+       return childRepository.findAllByFamilyId(familyId)
+    }
+
+
     fun save(childRequest: ChildRequest): Child {
         val family = familyService.findById(childRequest.familyId).getOrElse {
             throw IllegalArgumentException("Family not found")
@@ -30,7 +35,7 @@ class ChildService(private val childRepository: ChildRepository, private val fam
             val childToUpdate = Child(
                 childId = existingChild.childId,
                 childName = childRequest.childName,
-                birthDate = childRequest.birthDate,
+                birthDate = ChildRequest.parseBirthDate(childRequest.birthDate),
                 gender = childRequest.gender,
                 clothes = childRequest.clothes,
                 shoes = childRequest.shoes,

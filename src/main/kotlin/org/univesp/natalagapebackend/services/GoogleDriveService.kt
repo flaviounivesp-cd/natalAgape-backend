@@ -78,7 +78,7 @@ class GoogleDriveService {
                 .setFields("id, webViewLink")
                 .execute()
             logger.info("File uploaded successfully: ${uploadedFile.id} with link ${uploadedFile.webViewLink}")
-            uploadedFile.webViewLink
+            uploadedFile.id
         } catch (e: Exception) {
             logger.error("Error uploading file: ${e.message}", e)
             throw RuntimeException("Error uploading file", e)
