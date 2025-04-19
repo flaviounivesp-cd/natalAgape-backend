@@ -26,6 +26,6 @@ data class FoodContribution(
     val family: Family,
     val wasDelivered: Boolean? = null,
     val paidInSpecies: Boolean? = null,
-    val paymentDate: LocalDate? = null,
+    val donationDate: LocalDate? = null,
     val observation: String? = null
 )

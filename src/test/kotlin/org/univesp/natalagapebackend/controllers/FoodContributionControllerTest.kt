@@ -145,7 +145,7 @@ class FoodContributionControllerTest {
             leaderId = 1,
             wasDelivered = false,
             paidInSpecies = false,
-            paymentDate = null,
+            donationDate = null,
             observation = null
         )
         val savedFoodContribution =
@@ -195,7 +195,7 @@ class FoodContributionControllerTest {
             leaderId = 1,
             wasDelivered = true,
             paidInSpecies = true,
-            paymentDate = LocalDate.now().toString(),
+            donationDate = LocalDate.now().toString(),
             observation = null
         )
         val updatedFoodContribution =
@@ -218,7 +218,7 @@ class FoodContributionControllerTest {
             leaderId = 1,
             wasDelivered = false,
             paidInSpecies = false,
-            paymentDate = null,
+            donationDate = null,
             observation = null
         )
         `when`(foodContributionService.findById(999L)).thenReturn(Optional.empty())

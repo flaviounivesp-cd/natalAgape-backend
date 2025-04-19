@@ -11,10 +11,10 @@ data class FoodContributionRequest(
     val familyId: Long,
     val wasDelivered: Boolean? = null,
     val paidInSpecies: Boolean? = null,
-    val paymentDate: String? = null,
+    val donationDate: String? = null,
     val observation: String? = null,
 )
 
 fun FoodContributionRequest.toLocalDate(): LocalDate? {
-    return paymentDate?.let { LocalDate.parse(it) }
+    return donationDate?.let { LocalDate.parse(it) }
 }

@@ -72,7 +72,7 @@ class FoodContributionService(
             leader = leadership,
             wasDelivered = foodContribution.wasDelivered,
             paidInSpecies = foodContribution.paidInSpecies,
-            paymentDate = foodContribution.toLocalDate(),
+            donationDate = foodContribution.toLocalDate(),
             observation = foodContribution.observation
         )
          return foodContributionRepository.save(donationToUpdate)
