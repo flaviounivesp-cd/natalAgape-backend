@@ -19,8 +19,10 @@ data class FoodContribution(
     @ManyToOne
     val campaign: Campaign,
     @ManyToOne
+    val leader: Leadership,
+    @ManyToOne
     val sponsor: Sponsor,
-    @OneToOne
+    @ManyToOne
     val family: Family,
     val wasDelivered: Boolean? = null,
     val paidInSpecies: Boolean? = null,

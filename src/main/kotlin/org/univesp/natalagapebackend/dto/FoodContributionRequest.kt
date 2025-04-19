@@ -7,6 +7,7 @@ data class FoodContributionRequest(
     val id: Long = 0,
     val campaignId: Long,
     val sponsorId: Long,
+    val leaderId: Long,
     val familyId: Long,
     val wasDelivered: Boolean? = null,
     val paidInSpecies: Boolean? = null,

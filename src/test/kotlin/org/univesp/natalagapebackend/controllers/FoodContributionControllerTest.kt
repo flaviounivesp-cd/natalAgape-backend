@@ -6,9 +6,12 @@ import org.mockito.Mockito.`when`
 import org.springframework.http.ResponseEntity
 import org.univesp.natalagapebackend.dto.FoodContributionRequest
 import org.univesp.natalagapebackend.models.Campaign
+import org.univesp.natalagapebackend.models.Color
 import org.univesp.natalagapebackend.models.Family
 import org.univesp.natalagapebackend.models.FoodContribution
+import org.univesp.natalagapebackend.models.Leadership
 import org.univesp.natalagapebackend.models.Neighborhood
+import org.univesp.natalagapebackend.models.Role
 import org.univesp.natalagapebackend.models.Sponsor
 import org.univesp.natalagapebackend.services.FoodContributionService
 import java.time.LocalDate
@@ -17,7 +20,7 @@ import java.util.Optional
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class FoodContributionControllerTest{
+class FoodContributionControllerTest {
 
     private lateinit var foodContributionService: FoodContributionService
     private lateinit var foodContributionController: FoodContributionController
@@ -52,9 +55,11 @@ class FoodContributionControllerTest{
             "No observation"
         )
 
+        val leadership = Leadership(1, "Leader1", "123456789", Role.ADMIN, Color.RED)
+
         val foodContributions = listOf(
-            FoodContribution(1, campaign, sponsor, family, false, false, null, null),
-            FoodContribution(2, campaign, sponsor, family, true, true, LocalDate.now(), null),
+            FoodContribution(1, campaign, leadership, sponsor, family, false, false, null, null),
+            FoodContribution(2, campaign, leadership, sponsor, family, true, true, LocalDate.now(), null),
         )
         `when`(foodContributionService.listAll()).thenReturn(foodContributions)
 
@@ -86,9 +91,10 @@ class FoodContributionControllerTest{
             Neighborhood(1, "Centro"),
             "No observation"
         )
+        val leadership = Leadership(1, "Leader1", "123456789", Role.ADMIN, Color.RED)
 
         val foodContribution = Optional.of(
-            FoodContribution(1, campaign, sponsor, family, true, true, LocalDate.now(), null),
+            FoodContribution(1, campaign, leadership, sponsor, family, true, true, LocalDate.now(), null),
         )
         `when`(foodContributionService.findById(1)).thenReturn(foodContribution)
 
@@ -130,16 +136,20 @@ class FoodContributionControllerTest{
             "No observation"
         )
 
+        val leadership = Leadership(1, "Leader1", "123456789", Role.ADMIN, Color.RED)
+
         val foodContributionRequest = FoodContributionRequest(
             campaignId = 1,
             sponsorId = 1,
             familyId = 1,
+            leaderId = 1,
             wasDelivered = false,
             paidInSpecies = false,
             paymentDate = null,
             observation = null
         )
-        val savedFoodContribution = FoodContribution(2, campaign, sponsor, family, true, true, LocalDate.now(), null)
+        val savedFoodContribution =
+            FoodContribution(2, campaign, leadership, sponsor, family, true, true, LocalDate.now(), null)
 
         `when`(foodContributionService.save(foodContributionRequest)).thenReturn(savedFoodContribution)
 
@@ -172,20 +182,24 @@ class FoodContributionControllerTest{
             "No observation"
         )
 
+        val leadership = Leadership(1, "Leader1", "123456789", Role.ADMIN, Color.RED)
 
-        val existingFoodContribution = FoodContribution(1, campaign, sponsor, family, false, false, null, null)
+        val existingFoodContribution =
+            FoodContribution(1, campaign, leadership, sponsor, family, false, false, null, null)
 
         val foodContributionRequest = FoodContributionRequest(
             id = 1,
             campaignId = 1,
             sponsorId = 1,
             familyId = 1,
+            leaderId = 1,
             wasDelivered = true,
             paidInSpecies = true,
             paymentDate = LocalDate.now().toString(),
             observation = null
         )
-        val updatedFoodContribution = FoodContribution(1, campaign, sponsor, family, true, true, LocalDate.now(), null)
+        val updatedFoodContribution =
+            FoodContribution(1, campaign, leadership, sponsor, family, true, true, LocalDate.now(), null)
 
         `when`(foodContributionService.findById(1)).thenReturn(Optional.of(existingFoodContribution))
         `when`(foodContributionService.update(foodContributionRequest)).thenReturn(updatedFoodContribution)
@@ -201,6 +215,7 @@ class FoodContributionControllerTest{
             campaignId = 1,
             sponsorId = 1,
             familyId = 1,
+            leaderId = 1,
             wasDelivered = false,
             paidInSpecies = false,
             paymentDate = null,
