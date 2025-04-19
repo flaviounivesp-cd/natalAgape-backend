@@ -34,8 +34,8 @@ class FamilyController(
     }
 
     @PostMapping
-    fun save(@RequestBody family: FamilyDTOInput): FamilyDTOOutput {
-        return familyService.save(family).toDTOOutput()
+    fun save(@RequestBody family: FamilyDTOInput): ResponseEntity<FamilyDTOOutput> {
+        return ResponseEntity.ok(familyService.save(family).toDTOOutput())
     }
 
     @PutMapping("/{id}")
