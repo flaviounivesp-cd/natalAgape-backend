@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.univesp.natalagapebackend.dto.FoodContributionRequest
+import org.univesp.natalagapebackend.dto.FoodContributionResponse
+import org.univesp.natalagapebackend.dto.toDTOOutput
+import org.univesp.natalagapebackend.dto.toDTOResponse
 import org.univesp.natalagapebackend.models.FoodContribution
 import org.univesp.natalagapebackend.services.FoodContributionService
 import java.util.Optional
@@ -18,8 +21,10 @@ import java.util.Optional
 class FoodContributionController(val foodContributionService: FoodContributionService) {
 
     @GetMapping
-    fun listAll(): ResponseEntity<List<FoodContribution>> {
-        return ResponseEntity.ok(foodContributionService.listAll())
+    fun listAll(): ResponseEntity<List<FoodContributionResponse>> {
+        return ResponseEntity.ok(foodContributionService.listAll()
+            .map { foodContribution -> toDTOResponse(foodContribution) }
+        )
     }
 
     @GetMapping("/{id}")

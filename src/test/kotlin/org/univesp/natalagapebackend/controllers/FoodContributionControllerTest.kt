@@ -5,6 +5,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.springframework.http.ResponseEntity
 import org.univesp.natalagapebackend.dto.FoodContributionRequest
+import org.univesp.natalagapebackend.dto.toDTOResponse
 import org.univesp.natalagapebackend.models.Campaign
 import org.univesp.natalagapebackend.models.Color
 import org.univesp.natalagapebackend.models.Family
@@ -65,7 +66,9 @@ class FoodContributionControllerTest {
 
         val result = foodContributionController.listAll()
 
-        assertEquals(ResponseEntity.ok(foodContributions), result)
+        val expected = foodContributions.map { toDTOResponse(it) }
+
+        assertEquals(ResponseEntity.ok(expected), result)
     }
 
     @Test
