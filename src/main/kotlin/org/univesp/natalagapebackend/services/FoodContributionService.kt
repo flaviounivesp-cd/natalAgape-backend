@@ -39,6 +39,9 @@ class FoodContributionService(
             family = family,
             leader = leadership,
             sponsor = sponsor,
+            wasDelivered = foodContribution.wasDelivered,
+            paidInSpecies = foodContribution.paidInSpecies,
+            donationDate = foodContribution.toLocalDate(),
             observation = foodContribution.observation
         )
 
