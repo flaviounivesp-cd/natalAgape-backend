@@ -18,13 +18,15 @@ import java.util.Optional
 class FoodContributionController(val foodContributionService: FoodContributionService) {
 
     @GetMapping
-    fun listAll(): List<FoodContribution> {
-        return foodContributionService.listAll()
+    fun listAll(): ResponseEntity<List<FoodContribution>> {
+        return ResponseEntity.ok(foodContributionService.listAll())
     }
 
-    @GetMapping("{id}")
-    fun findById(@PathVariable id: Long): Optional<FoodContribution> {
-        return foodContributionService.findById(id)
+    @GetMapping("/{id}")
+    fun findById(@PathVariable id: Long): ResponseEntity<FoodContribution> {
+        return foodContributionService.findById(id).map { foodContribution ->
+            ResponseEntity.ok(foodContribution)
+        }.orElse(ResponseEntity.notFound().build())
     }
 
     @PostMapping
@@ -32,7 +34,7 @@ class FoodContributionController(val foodContributionService: FoodContributionSe
         return ResponseEntity.ok(foodContributionService.save(foodContribution))
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     fun update(@PathVariable id: Long, @RequestBody foodContribution: FoodContributionRequest): ResponseEntity<FoodContribution> {
         return foodContributionService.findById(id)
             .map { existingFoodContribution ->
