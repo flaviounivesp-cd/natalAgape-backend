@@ -9,14 +9,13 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.univesp.natalagapebackend.dto.FoodContributionEditResponse
+import org.univesp.natalagapebackend.dto.FoodContributionReport
 import org.univesp.natalagapebackend.dto.FoodContributionRequest
 import org.univesp.natalagapebackend.dto.FoodContributionResponse
 import org.univesp.natalagapebackend.dto.toDTOEditResponse
-import org.univesp.natalagapebackend.dto.toDTOOutput
 import org.univesp.natalagapebackend.dto.toDTOResponse
 import org.univesp.natalagapebackend.models.FoodContribution
 import org.univesp.natalagapebackend.services.FoodContributionService
-import java.util.Optional
 
 @Controller
 @RequestMapping("api/food-contribution")
@@ -50,5 +49,10 @@ class FoodContributionController(val foodContributionService: FoodContributionSe
                 ResponseEntity.ok(updatedEntity)
             }
             .orElse(ResponseEntity.notFound().build())
+    }
+
+    @GetMapping("report/{campaignId}")
+    fun report(@PathVariable campaignId: Long): ResponseEntity<FoodContributionReport> {
+        return ResponseEntity.ok(foodContributionService.report(campaignId))
     }
 }

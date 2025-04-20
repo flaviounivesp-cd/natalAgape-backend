@@ -2,7 +2,9 @@ package org.univesp.natalagapebackend.services
 
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
+import org.univesp.natalagapebackend.dto.FoodContributionReport
 import org.univesp.natalagapebackend.dto.FoodContributionRequest
+import org.univesp.natalagapebackend.dto.toDTOReport
 import org.univesp.natalagapebackend.dto.toLocalDate
 import org.univesp.natalagapebackend.handler.MaxContributionException
 import org.univesp.natalagapebackend.models.Campaign
@@ -16,7 +18,8 @@ class FoodContributionService(
     private val campaignService: CampaignService,
     private val leadershipService: LeadershipService,
     private val familyService: FamilyService,
-    private val sponsorService: SponsorService
+    private val sponsorService: SponsorService,
+    private val childService: ChildService
 ) {
 
     fun listAll(): List<FoodContribution> = foodContributionRepository.findAll()
@@ -80,6 +83,26 @@ class FoodContributionService(
             observation = foodContribution.observation
         )
          return foodContributionRepository.save(donationToUpdate)
+    }
+
+    fun report(campaignId: Long): FoodContributionReport {
+        val campaign = campaignService.findById(campaignId).orElseThrow {
+            EntityNotFoundException("Campaign not found")
+        }
+
+        val families = familyService.listAll().map {
+            family ->
+            val children = childService.findByFamilyId(family.familyId)
+            family.copy(totalChildren = children)
+        }
+        val foodContribution = foodContributionRepository.findFoodContributionByCampaignId(campaign.campaignId).map{
+            foodContribution ->
+            val family = families.find { it.familyId == foodContribution.family.familyId }
+            val children = childService.findByFamilyId(foodContribution.family.familyId)
+            foodContribution.copy(family = family?.copy(totalChildren = children) ?: foodContribution.family)
+        }
+
+        return toDTOReport(foodContribution, families)
     }
 
     fun checkCampaignFoodPerFamily(family: Family, campaign: Campaign) {

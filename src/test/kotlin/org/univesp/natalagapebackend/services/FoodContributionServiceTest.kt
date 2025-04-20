@@ -29,6 +29,7 @@ class FoodContributionServiceTest {
     private lateinit var leadershipService: LeadershipService
     private lateinit var familyService: FamilyService
     private lateinit var sponsorService: SponsorService
+    private lateinit var childService: ChildService
 
     @BeforeEach
     fun setUp() {
@@ -37,12 +38,14 @@ class FoodContributionServiceTest {
         familyService = mock(FamilyService::class.java)
         leadershipService = mock(LeadershipService::class.java)
         sponsorService = mock(SponsorService::class.java)
+        childService = mock(ChildService::class.java)
         foodContributionService = FoodContributionService(
             foodContributionRepository,
             campaignService,
             leadershipService,
             familyService,
-            sponsorService
+            sponsorService,
+            childService
         )
     }
 
