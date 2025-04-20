@@ -6,6 +6,7 @@ import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.univesp.natalagapebackend.dto.FoodContributionRequest
+import org.univesp.natalagapebackend.handler.MaxContributionException
 import org.univesp.natalagapebackend.models.Campaign
 import org.univesp.natalagapebackend.models.Color
 import org.univesp.natalagapebackend.models.Family
@@ -118,7 +119,7 @@ class FoodContributionServiceTest {
         )
         `when`(foodContributionRepository.findFoodContributionByFamilyId(1)).thenReturn(foodContributions)
 
-        val exception = assertThrows<IllegalArgumentException> {
+        val exception = assertThrows<MaxContributionException> {
             foodContributionService.checkCampaignFoodPerFamily(family, campaign)
         }
 

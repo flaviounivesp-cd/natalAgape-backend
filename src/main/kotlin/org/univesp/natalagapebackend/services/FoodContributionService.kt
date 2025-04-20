@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
 import org.univesp.natalagapebackend.dto.FoodContributionRequest
 import org.univesp.natalagapebackend.dto.toLocalDate
+import org.univesp.natalagapebackend.handler.MaxContributionException
 import org.univesp.natalagapebackend.models.Campaign
 import org.univesp.natalagapebackend.models.Family
 import org.univesp.natalagapebackend.models.FoodContribution
@@ -84,7 +85,7 @@ class FoodContributionService(
     fun checkCampaignFoodPerFamily(family: Family, campaign: Campaign) {
         val foodContributions = foodContributionRepository.findFoodContributionByFamilyId(family.familyId)
         if(foodContributions.size >= campaign.foodDonationPerFamily){
-            throw IllegalArgumentException("Family has already received the maximum number of food donations for this campaign")
+            throw MaxContributionException("Family has already received the maximum number of food donations for this campaign")
         }
     }
 }
