@@ -65,7 +65,7 @@ class FoodContributionControllerTest {
 
         val result = foodContributionController.listAll()
 
-        assertEquals(foodContributions, result)
+        assertEquals(ResponseEntity.ok(foodContributions), result)
     }
 
     @Test
@@ -100,7 +100,7 @@ class FoodContributionControllerTest {
 
         val result = foodContributionController.findById(1)
 
-        assertEquals(foodContribution, result)
+        assertEquals(ResponseEntity.ok(foodContribution.get()), result)
     }
 
     @Test
@@ -109,7 +109,7 @@ class FoodContributionControllerTest {
 
         val result = foodContributionController.findById(999L)
 
-        assertEquals(Optional.empty<FoodContribution>(), result)
+        assertEquals(ResponseEntity.notFound().build(), result)
     }
 
     @Test
