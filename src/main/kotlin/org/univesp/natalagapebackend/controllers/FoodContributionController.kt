@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.univesp.natalagapebackend.dto.FoodContributionEditResponse
 import org.univesp.natalagapebackend.dto.FoodContributionRequest
 import org.univesp.natalagapebackend.dto.FoodContributionResponse
+import org.univesp.natalagapebackend.dto.toDTOEditResponse
 import org.univesp.natalagapebackend.dto.toDTOOutput
 import org.univesp.natalagapebackend.dto.toDTOResponse
 import org.univesp.natalagapebackend.models.FoodContribution
@@ -28,9 +30,9 @@ class FoodContributionController(val foodContributionService: FoodContributionSe
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): ResponseEntity<FoodContribution> {
+    fun findById(@PathVariable id: Long): ResponseEntity<FoodContributionEditResponse> {
         return foodContributionService.findById(id).map { foodContribution ->
-            ResponseEntity.ok(foodContribution)
+            ResponseEntity.ok(toDTOEditResponse(foodContribution))
         }.orElse(ResponseEntity.notFound().build())
     }
 

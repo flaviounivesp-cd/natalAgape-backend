@@ -5,6 +5,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.springframework.http.ResponseEntity
 import org.univesp.natalagapebackend.dto.FoodContributionRequest
+import org.univesp.natalagapebackend.dto.toDTOEditResponse
 import org.univesp.natalagapebackend.dto.toDTOResponse
 import org.univesp.natalagapebackend.models.Campaign
 import org.univesp.natalagapebackend.models.Color
@@ -103,7 +104,7 @@ class FoodContributionControllerTest {
 
         val result = foodContributionController.findById(1)
 
-        assertEquals(ResponseEntity.ok(foodContribution.get()), result)
+        assertEquals(ResponseEntity.ok(toDTOEditResponse(foodContribution.get())), result)
     }
 
     @Test
