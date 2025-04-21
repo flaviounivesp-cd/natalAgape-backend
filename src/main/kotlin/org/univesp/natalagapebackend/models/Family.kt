@@ -25,4 +25,7 @@ data class Family(
 
     @Column(nullable = true)
     val observation: String? = null,
+
+    @Transient
+    var totalChildren: List<Child>? = emptyList()
 )

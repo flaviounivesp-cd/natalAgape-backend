@@ -49,6 +49,7 @@ class FamilyControllerTest {
                 phoneNumber = "123456789",
                 address = "123 Street",
                 neighborhoodId = 1,
+                neighborhoodName = "Centro",
                 observation = "No observation",
                 children = listOf(
                     Children(
@@ -68,6 +69,7 @@ class FamilyControllerTest {
                 phoneNumber = "123456789",
                 address = "123 Street",
                 neighborhoodId = 1,
+                neighborhoodName = "Centro",
                 observation = "No observation",
                 children = emptyList()
             )
@@ -103,6 +105,7 @@ class FamilyControllerTest {
                 phoneNumber = "123456789",
                 address = "123 Street",
                 neighborhoodId = 1,
+                neighborhoodName = "Centro",
                 observation = "No observation",
                 children = children.map {
                     Children(
@@ -147,7 +150,7 @@ class FamilyControllerTest {
 
         val result = familyController.save(familyInput)
 
-        assertEquals(familyOutput, result)
+        assertEquals(ResponseEntity.ok(familyOutput), result)
     }
 
     @Test
