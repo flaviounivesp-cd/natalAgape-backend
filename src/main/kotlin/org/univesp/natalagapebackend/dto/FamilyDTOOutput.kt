@@ -1,6 +1,6 @@
 package org.univesp.natalagapebackend.models.DTO
 
-import com.fasterxml.jackson.annotation.JsonIgnore
+
 import org.univesp.natalagapebackend.models.Family
 data class FamilyDTOOutput(
     val familyId: Long,
@@ -10,7 +10,8 @@ data class FamilyDTOOutput(
     val neighborhoodId: Long? = null,
     val neighborhoodName: String? = null,
     val observation: String? = null,
-    val leaderId: Long? = null
+    val leaderId: Long? = null,
+    val leaderName: String
 )
 
 fun Family.toDTOOutput(): FamilyDTOOutput {
@@ -21,7 +22,8 @@ fun Family.toDTOOutput(): FamilyDTOOutput {
         address = this.address,
         neighborhoodName = this.neighborhood.neighborhoodName,
         observation = this.observation,
-        leaderId = this.leader?.leaderId
+        leaderId = this.leadership.leaderId,
+        leaderName = this.leadership.leaderName
     )
 }
 
@@ -33,6 +35,7 @@ fun Family.toDTOOutputWithNeighborhoodId(): FamilyDTOOutput {
         address = this.address,
         neighborhoodId = this.neighborhood.neighborhoodId,
         observation = this.observation,
-        leaderId = this.leader?.leaderId
+        leaderId = this.leadership.leaderId,
+        leaderName = this.leadership.leaderName
     )
 }

@@ -12,7 +12,9 @@ data class FamilyWithChildrenDTO(
     val neighborhoodId: Long,
     val neighborhoodName: String,
     val observation: String? = null,
-    val children: List<Children>? = null
+    val children: List<Children>? = null,
+    val leaderId: Long,
+    val leaderName: String
 )
 
 data class Children(
@@ -45,6 +47,8 @@ fun toDTOOutput(family: Family, children: List<Child>? ): FamilyWithChildrenDTO 
                 pictureUrl = it.pictureUrl
 
             )
-        }
+        },
+        leaderId = family.leadership.leaderId,
+        leaderName = family.leadership.leaderName
     )
 }

@@ -19,19 +19,18 @@ class FamilyService(
 
     fun findById(id: Long): Optional<Family> = familyRepository.findById(id)
 
-    fun save(family: Family): Family =
-        familyRepository.save(family)
+    fun save(familyDTO: FamilyDTOInput): Family {
 
-    fun validateAndPrepareFamily(familyDTO: FamilyDTOInput): Family {
-        val neighborhood = neighborhoodService.findById(familyDTO.neighborhoodId)
-            ?.let { it }
-            ?: throw IllegalArgumentException("Neighborhood not found")
-
-        val leadership = familyDTO.leaderId?.let {
-            leadershipService.findById(it)
+        val neighborhood = neighborhoodService.findById(familyDTO.neighborhoodId).getOrElse {
+            throw IllegalArgumentException("Neighborhood not found")
         }
+        val leadership = leadershipService.findById(familyDTO.leaderId).getOrElse {
+            throw IllegalArgumentException("Leadership not found")
+        }
+        familyDTO.leaderId?.let {
 
-        return familyDTO.toEntity(neighborhood, leadership)
+        }
+        return familyRepository.save(familyDTO.toEntity(neighborhood, leadership))
     }
 
     fun update(familyDTO: FamilyDTOInput): Family {
@@ -40,6 +39,9 @@ class FamilyService(
             val newNeighborhood = neighborhoodService.findById(familyDTO.neighborhoodId).getOrElse {
                 throw IllegalArgumentException("Neighborhood not found")
             }
+            val leadership = leadershipService.findById(familyDTO.leaderId).getOrElse {
+                throw IllegalArgumentException("Leadership not found")
+            }
             val familyToUpdate = Family(
                 familyId = existingFamily.familyId,
                 responsibleName = familyDTO.responsibleName,
@@ -47,13 +49,12 @@ class FamilyService(
                 address = familyDTO.address,
                 neighborhood = newNeighborhood,
                 observation = familyDTO.observation,
-                leader = null
+                leadership = leadership
             )
             familyRepository.save(familyToUpdate)
 
         }.orElseThrow { IllegalArgumentException("Family not found") }
     }
-
     fun deleteFamily(familyId: Long) {
         familyRepository.deleteById(familyId)
     }

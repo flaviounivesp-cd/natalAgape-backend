@@ -8,7 +8,6 @@ import org.univesp.natalagapebackend.dto.FamilyWithChildrenDTO
 import org.univesp.natalagapebackend.dto.toDTOOutput
 import org.univesp.natalagapebackend.models.DTO.FamilyDTOOutput
 import org.univesp.natalagapebackend.models.DTO.toDTOOutput
-import org.univesp.natalagapebackend.models.Family
 import org.univesp.natalagapebackend.services.ChildService
 import org.univesp.natalagapebackend.services.FamilyService
 
@@ -37,8 +36,8 @@ class FamilyController(
     }
 
     @PostMapping
-    fun save(@RequestBody family: Family): FamilyDTOOutput {
-        return familyService.save(family).toDTOOutput()
+    fun save(@RequestBody family: FamilyDTOInput): ResponseEntity<FamilyDTOOutput> {
+        return ResponseEntity.ok(familyService.save(family).toDTOOutput())
     }
 
     @PutMapping("/{id}")

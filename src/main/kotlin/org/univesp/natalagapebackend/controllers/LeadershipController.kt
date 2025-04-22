@@ -20,13 +20,11 @@ class LeadershipController(val leadershipService: LeadershipService) {
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long): ResponseEntity<LeadershipDTO> {
-        val leadership = leadershipService.findById(id)
-        return if (leadership != null) {
-            ResponseEntity.ok(leadership.toDTO())
-        } else {
-            ResponseEntity.notFound().build()
-        }
+        return leadershipService.findById(id).map {
+            ResponseEntity.ok(it.toDTO())
+        }.orElse(ResponseEntity.notFound().build())
     }
+
 
     @PostMapping
     fun save(@RequestBody leadershipDTO: LeadershipDTO): ResponseEntity<LeadershipDTO> {

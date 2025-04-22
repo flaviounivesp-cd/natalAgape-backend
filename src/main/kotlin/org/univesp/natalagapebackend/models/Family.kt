@@ -27,6 +27,5 @@ data class Family(
     val observation: String? = null,
 
     @ManyToOne
-    @JoinColumn(name = "leader_id")
-    var leader: Leadership? // Alterado de leaderId para leader
+    var leadership: Leadership
 )
