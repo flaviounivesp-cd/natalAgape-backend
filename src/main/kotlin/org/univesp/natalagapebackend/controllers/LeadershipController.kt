@@ -4,8 +4,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.univesp.natalagapebackend.models.DTO.LeadershipDTO
 import org.univesp.natalagapebackend.models.DTO.toDTO
-import org.univesp.natalagapebackend.models.DTO.toEntity
-
+import org.univesp.natalagapebackend.models.Leadership
 import org.univesp.natalagapebackend.services.LeadershipService
 
 @RestController
@@ -27,21 +26,15 @@ class LeadershipController(val leadershipService: LeadershipService) {
 
 
     @PostMapping
-    fun save(@RequestBody leadershipDTO: LeadershipDTO): ResponseEntity<LeadershipDTO> {
-        val saved = leadershipService.save(leadershipDTO.toEntity())
-        return ResponseEntity.ok(saved.toDTO())
+    fun save(@RequestBody leadership: Leadership): ResponseEntity<Leadership> {
+        val saved = leadershipService.save(leadership)
+        return ResponseEntity.ok(saved)
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody leadershipDTO: LeadershipDTO): ResponseEntity<LeadershipDTO> {
-        if (leadershipDTO.leaderId != id) {
-            return ResponseEntity.badRequest().build()
-        }
-
-        val existingLeadership = leadershipService.findById(id)
-            ?: return ResponseEntity.notFound().build()
-
-        val updated = leadershipService.update(leadershipDTO.toEntity())
-        return ResponseEntity.ok(updated.toDTO())
+    fun update(@PathVariable id: Long, @RequestBody leadership: Leadership): ResponseEntity<Leadership> {
+        return leadershipService.findById(id).map { _ ->
+            ResponseEntity.ok(leadershipService.update(leadership))
+        }.orElse(ResponseEntity.notFound().build())
     }
 }

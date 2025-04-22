@@ -2,14 +2,15 @@ package org.univesp.natalagapebackend.controllers
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.springframework.http.ResponseEntity
 import org.univesp.natalagapebackend.models.Color
+import org.univesp.natalagapebackend.models.DTO.toDTO
 import org.univesp.natalagapebackend.models.Leadership
 import org.univesp.natalagapebackend.models.Role
 import org.univesp.natalagapebackend.services.LeadershipService
 import java.util.*
-import kotlin.test.Test
 
 class LeadershipControllerTest {
 
@@ -23,30 +24,30 @@ class LeadershipControllerTest {
     }
 
     @Test
-    fun listAllReturnsLeaderships() {
+    fun getAllLeadershipsReturnsList() {
         val leaderships = listOf(
-            Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED),
-            Leadership(2L, "Leader2", "987654321", Role.LEADER, Color.BLUE)
+            Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString()),
+            Leadership(2L, "Leader2", "987654321", Role.LEADER, Color.BLUE.toString())
         )
-        `when`(leadershipService.listAll()).thenReturn(leaderships)
+        `when`(leadershipService.getAllLeaderships()).thenReturn(leaderships)
 
-        val result = leadershipController.listAll()
+        val result = leadershipController.getAllLeaderships()
 
-        assertEquals(leaderships, result)
+        assertEquals(ResponseEntity.ok(leaderships.map { it.toDTO() }), result)
     }
 
     @Test
     fun findByIdReturnsLeadership() {
-        val leadership = Optional.of(Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED))
-        `when`(leadershipService.findById(1L)).thenReturn(leadership)
+        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString())
+        `when`(leadershipService.findById(1L)).thenReturn(Optional.of(leadership))
 
         val result = leadershipController.findById(1L)
 
-        assertEquals(ResponseEntity.ok(leadership.get()), result)
+        assertEquals(ResponseEntity.ok(leadership.toDTO()), result)
     }
 
     @Test
-    fun findByIdReturnsNotFoundForNonExistentId() {
+    fun findByIdReturnsNotFound() {
         `when`(leadershipService.findById(999L)).thenReturn(Optional.empty())
 
         val result = leadershipController.findById(999L)
@@ -56,17 +57,18 @@ class LeadershipControllerTest {
 
     @Test
     fun saveCreatesLeadership() {
-        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED)
+        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString())
         `when`(leadershipService.save(leadership)).thenReturn(leadership)
 
         val result = leadershipController.save(leadership)
 
-        assertEquals(leadership, result)
+        assertEquals(ResponseEntity.ok(leadership), result)
     }
 
     @Test
     fun updateModifiesLeadership() {
-        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED)
+        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString())
+
         `when`(leadershipService.findById(1L)).thenReturn(Optional.of(leadership))
         `when`(leadershipService.update(leadership)).thenReturn(leadership)
 
@@ -76,8 +78,8 @@ class LeadershipControllerTest {
     }
 
     @Test
-    fun updateReturnsNotFoundForNonExistentId() {
-        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED)
+    fun updateReturnsNotFound() {
+        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString())
         `when`(leadershipService.findById(999L)).thenReturn(Optional.empty())
 
         val result = leadershipController.update(999L, leadership)
