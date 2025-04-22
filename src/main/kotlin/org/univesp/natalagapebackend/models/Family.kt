@@ -27,5 +27,8 @@ data class Family(
     val observation: String? = null,
 
     @ManyToOne
-    var leadership: Leadership
+    var leadership: Leadership,
+
+    @Transient
+    var totalChildren: List<Child>? = emptyList()
 )

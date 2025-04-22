@@ -72,6 +72,7 @@ class FamilyControllerTest {
                 phoneNumber = "123456789",
                 address = "123 Street",
                 neighborhoodId = 1,
+                neighborhoodName = "Centro",
                 observation = "No observation",
                 children = listOf(
                     Children(
@@ -85,8 +86,8 @@ class FamilyControllerTest {
                     )
                 ),
                 leaderId = 1,
-                leaderName = "Leader 1",
-                neighborhoodName = "Centro"
+                leaderName = "Leader 1"
+
             ),
             FamilyWithChildrenDTO(
                 familyId = 2,
@@ -94,11 +95,11 @@ class FamilyControllerTest {
                 phoneNumber = "123456789",
                 address = "123 Street",
                 neighborhoodId = 1,
+                neighborhoodName = "Centro",
                 observation = "No observation",
                 children = emptyList(),
                 leaderId = 1,
-                leaderName = "Leader 1",
-                neighborhoodName = "Centro"
+                leaderName = "Leader 1"
             )
         )
 
@@ -140,6 +141,7 @@ class FamilyControllerTest {
                 phoneNumber = "123456789",
                 address = "123 Street",
                 neighborhoodId = 1,
+                neighborhoodName = "Centro",
                 observation = "No observation",
                 children = children.map {
                     Children(
@@ -153,8 +155,7 @@ class FamilyControllerTest {
                     )
                 },
                 leaderId = 1,
-                leaderName = "Leader 1",
-                neighborhoodName = "Centro"
+                leaderName = "Leader 1"
             )
         )
 
