@@ -28,7 +28,7 @@ class UploadController(private val googleDriveService: GoogleDriveService) {
                 .header("Content-Type", mimeType)
                 .header("Content-Disposition", "inline") // Permite visualização direta no navegador
                 .body(fileContent)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             ResponseEntity.status(500).body(null)
         }
     }
