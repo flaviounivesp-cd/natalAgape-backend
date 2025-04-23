@@ -27,9 +27,7 @@ class FamilyService(
         val leadership = leadershipService.findById(familyDTO.leaderId).getOrElse {
             throw IllegalArgumentException("Leadership not found")
         }
-        familyDTO.leaderId?.let {
 
-        }
         return familyRepository.save(familyDTO.toEntity(neighborhood, leadership))
     }
 
