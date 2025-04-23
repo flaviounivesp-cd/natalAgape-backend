@@ -50,7 +50,7 @@ fun toDTOReport(
                 FamiliesWithContribution(
                     responsibleName = foodContribution.family.responsibleName,
                     leaderName = foodContribution.leader.leaderName,
-                    leaderColor = foodContribution.leader.leaderColor,
+                    leaderColor = Color.valueOf(foodContribution.leader.leaderColor),
                 )
             },
         familiesWithNoContributionList = families.filter { family ->

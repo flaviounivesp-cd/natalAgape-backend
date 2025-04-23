@@ -65,7 +65,7 @@ class FoodContributionServiceTest {
     fun saveThrowsExceptionWhenFamilyNotFound() {
         val foodContributionRequest = FoodContributionRequest(1, 1, 1, 1, 1, false, false, null, "Observation")
         val campaign = Campaign(1, Year.now(), "church", 1)
-        val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED)
+        val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED.toString())
         `when`(campaignService.findById(1)).thenReturn(Optional.of(campaign))
         `when`(leadershipService.findById(1)).thenReturn(Optional.of(leadership))
         `when`(familyService.findById(1)).thenReturn(Optional.empty())
@@ -81,7 +81,13 @@ class FoodContributionServiceTest {
     fun saveThrowsExceptionWhenLeadershipNotFound() {
         val foodContributionRequest = FoodContributionRequest(1, 1, 1, 1, 1, false, false, null, "Observation")
         val campaign = Campaign(1, Year.now(), "church", 1)
-        val family = Family(1, "Family 1", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation")
+        val family = Family(1, "Family 1", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation",Leadership(
+            leaderId = 1,
+            leaderName = "Leader 1",
+            leaderPhone = "123456789",
+            leaderRole = Role.LEADER,
+            leaderColor = "BLACK"
+        ))
         `when`(campaignService.findById(1)).thenReturn(Optional.of(campaign))
         `when`(familyService.findById(1)).thenReturn(Optional.of(family))
         `when`(leadershipService.findById(1)).thenReturn(Optional.empty())
@@ -97,8 +103,14 @@ class FoodContributionServiceTest {
     fun saveThrowsExceptionWhenSponsorNotFound() {
         val foodContributionRequest = FoodContributionRequest(1, 1, 999, 1, 1, false, false, null, "Observation")
         val campaign = Campaign(1, Year.now(), "Campaign 1", 1)
-        val family = Family(1, "Family 1", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation")
-        val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED)
+        val family = Family(1, "Family 1", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation",Leadership(
+            leaderId = 1,
+            leaderName = "Leader 1",
+            leaderPhone = "123456789",
+            leaderRole = Role.LEADER,
+            leaderColor = "BLACK"
+        ))
+        val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED.toString())
         `when`(campaignService.findById(1)).thenReturn(Optional.of(campaign))
         `when`(familyService.findById(1)).thenReturn(Optional.of(family))
         `when`(leadershipService.findById(1)).thenReturn(Optional.of(leadership))
@@ -113,10 +125,16 @@ class FoodContributionServiceTest {
 
     @Test
     fun checkCampaignFoodPerFamilyThrowsExceptionWhenLimitExceeded() {
-        val family = Family(1, "Family 1", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation")
+        val family = Family(1, "Family 1", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation",Leadership(
+            leaderId = 1,
+            leaderName = "Leader 1",
+            leaderPhone = "123456789",
+            leaderRole = Role.LEADER,
+            leaderColor = "BLACK"
+        ))
         val campaign = Campaign(1, Year.now(), "Campaign 1", 1)
         val sponsor = Sponsor(1, "Sponsor 1", "123456789")
-        val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED)
+        val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED.toString())
         val foodContributions = listOf(
             FoodContribution(1, campaign, leadership, sponsor, family, false, false, null, "Observation")
         )

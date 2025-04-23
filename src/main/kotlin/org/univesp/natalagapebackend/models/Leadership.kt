@@ -14,7 +14,10 @@ class Leadership(
 
     @Column(nullable = false) val leaderPhone: String,
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false) val leaderRole: Role,
 
-    @Column(nullable = false) val leaderColor: Color
+
+    @Column(nullable = false) val leaderColor: String
+
 )

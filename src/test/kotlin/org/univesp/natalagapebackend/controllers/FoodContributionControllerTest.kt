@@ -54,10 +54,17 @@ class FoodContributionControllerTest {
             "123456789",
             "123 Street",
             Neighborhood(1, "Centro"),
-            "No observation"
+            "No observation",
+            Leadership(
+                leaderId = 1,
+                leaderName = "Leader 1",
+                leaderPhone = "123456789",
+                leaderRole = Role.LEADER,
+                leaderColor = "BLACK"
+            )
         )
 
-        val leadership = Leadership(1, "Leader1", "123456789", Role.ADMIN, Color.RED)
+        val leadership = Leadership(1, "Leader1", "123456789", Role.ADMIN, Color.RED.toString())
 
         val foodContributions = listOf(
             FoodContribution(1, campaign, leadership, sponsor, family, false, false, null, null),
@@ -93,9 +100,16 @@ class FoodContributionControllerTest {
             "123456789",
             "123 Street",
             Neighborhood(1, "Centro"),
-            "No observation"
+            "No observation",
+            Leadership(
+                leaderId = 1,
+                leaderName = "Leader 1",
+                leaderPhone = "123456789",
+                leaderRole = Role.LEADER,
+                leaderColor = "BLACK"
+            )
         )
-        val leadership = Leadership(1, "Leader1", "123456789", Role.ADMIN, Color.RED)
+        val leadership = Leadership(1, "Leader1", "123456789", Role.ADMIN, Color.RED.toString())
 
         val foodContribution = Optional.of(
             FoodContribution(1, campaign, leadership, sponsor, family, true, true, LocalDate.now(), null),
@@ -137,10 +151,16 @@ class FoodContributionControllerTest {
             "123456789",
             "123 Street",
             Neighborhood(1, "Centro"),
-            "No observation"
+            "No observation",Leadership(
+                leaderId = 1,
+                leaderName = "Leader 1",
+                leaderPhone = "123456789",
+                leaderRole = Role.LEADER,
+                leaderColor = "BLACK"
+            )
         )
 
-        val leadership = Leadership(1, "Leader1", "123456789", Role.ADMIN, Color.RED)
+        val leadership = Leadership(1, "Leader1", "123456789", Role.ADMIN, Color.RED.toString())
 
         val foodContributionRequest = FoodContributionRequest(
             campaignId = 1,
@@ -183,10 +203,16 @@ class FoodContributionControllerTest {
             "123456789",
             "123 Street",
             Neighborhood(1, "Centro"),
-            "No observation"
+            "No observation",Leadership(
+                leaderId = 1,
+                leaderName = "Leader 1",
+                leaderPhone = "123456789",
+                leaderRole = Role.LEADER,
+                leaderColor = "BLACK"
+            )
         )
 
-        val leadership = Leadership(1, "Leader1", "123456789", Role.ADMIN, Color.RED)
+        val leadership = Leadership(1, "Leader1", "123456789", Role.ADMIN, Color.RED.toString())
 
         val existingFoodContribution =
             FoodContribution(1, campaign, leadership, sponsor, family, false, false, null, null)

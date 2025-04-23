@@ -14,9 +14,6 @@ class UploadController(private val googleDriveService: GoogleDriveService) {
     fun uploadFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
         return try {
             val fileId = googleDriveService.uploadFile(file)
-
-
-
             ResponseEntity.ok(fileId)
         } catch (e: Exception) {
             ResponseEntity.internalServerError().body("Error uploading file: ${e.message}")
@@ -31,7 +28,7 @@ class UploadController(private val googleDriveService: GoogleDriveService) {
                 .header("Content-Type", mimeType)
                 .header("Content-Disposition", "inline") // Permite visualização direta no navegador
                 .body(fileContent)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             ResponseEntity.status(500).body(null)
         }
     }

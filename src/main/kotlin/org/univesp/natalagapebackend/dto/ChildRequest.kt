@@ -25,7 +25,6 @@ data class ChildRequest(
     }
 }
 
-
 fun ChildRequest.toEntity(family: Family): Child {
 
     return Child(
@@ -39,6 +38,3 @@ fun ChildRequest.toEntity(family: Family): Child {
         family = family
     )
 }
-
-
-
