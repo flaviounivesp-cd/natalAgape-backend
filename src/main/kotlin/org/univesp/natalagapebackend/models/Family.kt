@@ -29,6 +29,7 @@ data class Family(
     @ManyToOne
     var leadership: Leadership,
 
+    @Column(nullable = false)
     var isActive: Boolean = true,
 
     @Transient
