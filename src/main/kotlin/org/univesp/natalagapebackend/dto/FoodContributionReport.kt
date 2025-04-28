@@ -40,11 +40,19 @@ fun toDTOReport(
     foodContributions: List<FoodContribution>,
     families: List<Family>,
 ): FoodContributionReport {
+
+    val familiesWithPendingContribution = foodContributions.filter { it.wasDelivered == false && it.donationDate == null }
+    val familiesWithContribution = foodContributions.filter { it.wasDelivered == true && it.donationDate != null }
+    val familiesWithNoContribution = families.filter { family ->
+        foodContributions.none { it.family.familyId == family.familyId }
+    }
+
     return FoodContributionReport(
-        familiesWithContribution = foodContributions.count { it.wasDelivered == true && it.donationDate != null },
-        familiesWithNoContribution = families.size - foodContributions.size,
-        familiesWithPendingContribution = foodContributions.count { it.wasDelivered == false && it.donationDate == null },
-        totalActiveFamilies = families.size,
+
+        familiesWithContribution = familiesWithContribution.size,
+        familiesWithNoContribution = familiesWithNoContribution.size,
+        familiesWithPendingContribution = familiesWithPendingContribution.size,
+        totalActiveFamilies = familiesWithContribution.size + familiesWithNoContribution.size + familiesWithPendingContribution.size,
         familiesWithContributionList = foodContributions.filter { it.wasDelivered == true && it.donationDate != null }
             .map { foodContribution ->
                 FamiliesWithContribution(

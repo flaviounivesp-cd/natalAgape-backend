@@ -29,6 +29,8 @@ data class Family(
     @ManyToOne
     var leadership: Leadership,
 
+    var isActive: Boolean = true,
+
     @Transient
     var totalChildren: List<Child>? = emptyList()
 )

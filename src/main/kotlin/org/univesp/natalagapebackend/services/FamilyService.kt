@@ -1,5 +1,6 @@
 package org.univesp.natalagapebackend.services
 
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import org.univesp.natalagapebackend.models.Family
 import org.univesp.natalagapebackend.dto.FamilyDTOInput
@@ -12,10 +13,10 @@ import kotlin.jvm.optionals.getOrElse
 class FamilyService(
     private val familyRepository: FamilyRepository,
     private val neighborhoodService: NeighborhoodService,
-    private val leadershipService: LeadershipService
+    private val leadershipService: LeadershipService,
 ) {
 
-    fun listAll(): List<Family> = familyRepository.findAll()
+    fun listAll(): List<Family> = familyRepository.findAllActive()
 
     fun findById(id: Long): Optional<Family> = familyRepository.findById(id)
 
@@ -53,7 +54,10 @@ class FamilyService(
 
         }.orElseThrow { IllegalArgumentException("Family not found") }
     }
+
+    @Transactional
     fun deleteFamily(familyId: Long) {
-        familyRepository.deleteById(familyId)
+        familyRepository.deactivateFamily(familyId)
     }
+
 }

@@ -1,5 +1,6 @@
 package org.univesp.natalagapebackend.services
 
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import org.univesp.natalagapebackend.dto.ChildRequest
 import org.univesp.natalagapebackend.dto.toEntity
@@ -46,5 +47,14 @@ class ChildService(private val childRepository: ChildRepository, private val fam
         }.orElseThrow { IllegalArgumentException("Child not found") }
     }
 
-    fun deleteById(id: Long) = childRepository.deleteById(id)
+    @Transactional
+    fun deleteById(id: Long) = childRepository.deactivateChild(id)
+
+    @Transactional
+    fun deleteByFamilyId(familyId: Long) {
+        val children = childRepository.findAllByFamilyId(familyId)
+        children?.forEach { child ->
+            childRepository.deactivateChild(child.childId)
+        }
+    }
 }

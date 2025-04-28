@@ -1,5 +1,6 @@
 package org.univesp.natalagapebackend.controllers
 
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.univesp.natalagapebackend.dto.FamilyDTOInput
@@ -54,8 +55,9 @@ class FamilyController(
     @DeleteMapping("/{id}")
     fun deleteFamily(@PathVariable id: Long): ResponseEntity<Void> {
         return if (familyService.findById(id).isPresent) {
+            childService.deleteByFamilyId(id)
             familyService.deleteFamily(id)
-            ResponseEntity.noContent().build()
+            ResponseEntity<Void>(HttpStatus.OK)
         } else {
             ResponseEntity.notFound().build()
         }
