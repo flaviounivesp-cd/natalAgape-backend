@@ -55,7 +55,7 @@ class FamilyControllerTest {
         )
 
         val child = Child(
-            1, "name", "Male", LocalDate.now(), "", "", null, family01
+            1, "name", "Male", LocalDate.now(), "", "", null, true,family01
         )
 
         val families = listOf(family01, family02)
@@ -127,7 +127,7 @@ class FamilyControllerTest {
             )
         )
         val children = listOf(
-            Child(1, "Child 1", "Male", LocalDate.now(), "Clothes", "Shoes", null, family)
+            Child(1, "Child 1", "Male", LocalDate.now(), "Clothes", "Shoes", null,true, family)
         )
         `when`(familyService.findById(1)).thenReturn(Optional.of(family))
         `when`(childService.findByFamilyId(1)).thenReturn(children)

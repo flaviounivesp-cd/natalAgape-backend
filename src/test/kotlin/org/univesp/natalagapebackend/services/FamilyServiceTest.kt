@@ -61,7 +61,7 @@ class FamilyServiceTest {
                 )
             )
         )
-        `when`(familyRepository.findAll()).thenReturn(families)
+        `when`(familyRepository.findAllActive()).thenReturn(families)
 
         val result = familyService.listAll()
 

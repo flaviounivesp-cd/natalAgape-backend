@@ -57,7 +57,7 @@ class ChildController(
     fun deleteById(@PathVariable id: Long): ResponseEntity<Void> {
         return childService.findById(id).map { child ->
             childService.deleteById(child.childId)
-            ResponseEntity<Void>(HttpStatus.NO_CONTENT)
+            ResponseEntity<Void>(HttpStatus.OK)
         }.orElse(ResponseEntity.notFound().build())
     }
 }
