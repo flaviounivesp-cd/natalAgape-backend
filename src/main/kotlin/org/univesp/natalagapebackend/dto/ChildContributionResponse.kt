@@ -4,7 +4,6 @@ import org.univesp.natalagapebackend.models.ChildContribution
 
 data class ChildContributionResponse(
     val id: Long,
-    //val campaignName: String,
     val sponsorName: String,
     val childName: String,
     val wasDelivered: Boolean? = null,
@@ -15,7 +14,6 @@ data class ChildContributionResponse(
 fun toDTOResponse(childContribution: ChildContribution): ChildContributionResponse {
     return ChildContributionResponse(
         id = childContribution.id,
-        //campaignName = childContribution.campaign.campaignName,
         sponsorName = childContribution.sponsor.sponsorName,
         childName = childContribution.child.childName,
         wasDelivered = childContribution.wasDelivered,

@@ -2,10 +2,7 @@ package org.univesp.natalagapebackend.services
 
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
-import org.univesp.natalagapebackend.dto.ChildContributionRequest
-import org.univesp.natalagapebackend.dto.ChildContributionResponse
-import org.univesp.natalagapebackend.dto.toDTOResponse
-import org.univesp.natalagapebackend.dto.toLocalDate
+import org.univesp.natalagapebackend.dto.*
 import org.univesp.natalagapebackend.models.*
 import org.univesp.natalagapebackend.repositories.ChildContributionRepository
 
@@ -14,11 +11,13 @@ class ChildContributionService(
     private val childContributionRepository: ChildContributionRepository,
     private val campaignService: CampaignService,
     private val sponsorService: SponsorService,
-    private val childService: ChildService
+    private val childService: ChildService,
+    private val familyService: FamilyService
 ) {
 
     fun listAll(): List<ChildContribution> =
         childContributionRepository.findAll()
+
     fun findById(id: Long) = childContributionRepository.findById(id)
 
     fun save(request: ChildContributionRequest): ChildContribution {
@@ -58,12 +57,29 @@ class ChildContributionService(
 
         return childContributionRepository.save(updatedContribution)
     }
-//TODO: Implement report method
-//    fun report(campaignId: Long): List<ChildContributionResponse> {
-//        val campaign = findCampaign(campaignId)
-//        val contributions = childContributionRepository.findByCampaignId(campaign.id)
-//        return contributions.map { toDTOResponse(it) }
-//    }
+
+    fun report(campaignId: Long): ChildContributionReport {
+        val campaign = campaignService.findById(campaignId).orElseThrow {
+            EntityNotFoundException("Campaign not found")
+        }
+        val children = childService.listAll()
+
+        val childrenContributions = childContributionRepository.findChildrenContributionByCampaignId(campaign.campaignId)
+            .map { childrenContribution ->
+
+                ChildContribution(
+                    id = childrenContribution.id,
+                    campaign = childrenContribution.campaign,
+                    sponsor = childrenContribution.sponsor,
+                    child = childrenContribution.child,
+                    wasDelivered = childrenContribution.wasDelivered,
+                    acceptance = childrenContribution.acceptance,
+                    observation = childrenContribution.observation
+                )
+
+            }
+        return childContributionToDTOReport(childrenContributions, children)
+    }
 
     private fun findCampaign(campaignId: Long): Campaign =
         campaignService.findById(campaignId).orElseThrow {

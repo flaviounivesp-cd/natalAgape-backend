@@ -2,6 +2,7 @@ package org.univesp.natalagapebackend.controllers
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.univesp.natalagapebackend.dto.ChildContributionReport
 import org.univesp.natalagapebackend.dto.ChildContributionRequest
 import org.univesp.natalagapebackend.dto.ChildContributionResponse
 import org.univesp.natalagapebackend.dto.toDTOResponse
@@ -41,9 +42,9 @@ class ChildContributionController(private val childContributionService: ChildCon
             ResponseEntity.ok(updatedEntity)
         }.orElse(ResponseEntity.notFound().build())
     }
-//TODO: Implement report method
-//    @GetMapping("report/{campaignId}")
-//    fun report(@PathVariable campaignId: Long): ResponseEntity<Any> {
-//        return ResponseEntity.ok(childContributionService.report(campaignId))
-//    }
+
+    @GetMapping("/report/{campaignId}")
+    fun report(@PathVariable campaignId: Long): ResponseEntity<ChildContributionReport> {
+        return ResponseEntity.ok(childContributionService.report(campaignId))
+    }
 }
