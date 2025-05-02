@@ -17,6 +17,8 @@ data class ChildContribution(
     //@JoinColumn(name = "sponsor_id", nullable = false)
     val sponsor: Sponsor,
     @ManyToOne
+    val leadership: Leadership,
+    @ManyToOne
     //@JoinColumn(name = "child_id", nullable = false)
     val child: Child,
     val wasDelivered: Boolean? = null,

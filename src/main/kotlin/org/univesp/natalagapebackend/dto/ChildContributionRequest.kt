@@ -6,6 +6,7 @@ data class ChildContributionRequest(
     val id: Long = 0,
     val campaignId: Long,
     val sponsorId: Long,
+    val leaderId: Long,
     val childId: Long,
     val wasDelivered: Boolean,
     val acceptance: String? = null,

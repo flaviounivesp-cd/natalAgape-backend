@@ -12,7 +12,7 @@ class ChildContributionService(
     private val campaignService: CampaignService,
     private val sponsorService: SponsorService,
     private val childService: ChildService,
-    private val familyService: FamilyService
+    private val leadershipService: LeadershipService
 ) {
 
     fun listAll(): List<ChildContribution> =
@@ -22,6 +22,7 @@ class ChildContributionService(
 
     fun save(request: ChildContributionRequest): ChildContribution {
         val campaign = findCampaign(request.campaignId)
+        val leadership = findLeadership(request.leaderId)
         val sponsor = findSponsor(request.sponsorId)
         val child = findChild(request.childId)
 
@@ -30,6 +31,7 @@ class ChildContributionService(
             campaign = campaign,
             sponsor = sponsor,
             child = child,
+            leadership = leadership,
             wasDelivered = request.wasDelivered,
             acceptance = request.toLocalDate(),
             observation = request.observation
@@ -72,6 +74,7 @@ class ChildContributionService(
                     campaign = childrenContribution.campaign,
                     sponsor = childrenContribution.sponsor,
                     child = childrenContribution.child,
+                    leadership = childrenContribution.leadership,
                     wasDelivered = childrenContribution.wasDelivered,
                     acceptance = childrenContribution.acceptance,
                     observation = childrenContribution.observation
@@ -94,5 +97,10 @@ class ChildContributionService(
     private fun findChild(childId: Long): Child =
         childService.findById(childId).orElseThrow {
             EntityNotFoundException("Child not found")
+        }
+
+    private fun findLeadership(leadershipId: Long): Leadership =
+        leadershipService.findById(leadershipId).orElseThrow {
+            EntityNotFoundException("Leadership not found")
         }
 }

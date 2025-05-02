@@ -2,9 +2,11 @@ package org.univesp.natalagapebackend.controllers
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.univesp.natalagapebackend.dto.ChildContributionEditResponse
 import org.univesp.natalagapebackend.dto.ChildContributionReport
 import org.univesp.natalagapebackend.dto.ChildContributionRequest
 import org.univesp.natalagapebackend.dto.ChildContributionResponse
+import org.univesp.natalagapebackend.dto.toDTOEditResponse
 import org.univesp.natalagapebackend.dto.toDTOResponse
 import org.univesp.natalagapebackend.models.ChildContribution
 import org.univesp.natalagapebackend.services.ChildContributionService
@@ -21,9 +23,9 @@ class ChildContributionController(private val childContributionService: ChildCon
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): ResponseEntity<ChildContributionResponse> {
+    fun findById(@PathVariable id: Long): ResponseEntity<ChildContributionEditResponse> {
         return childContributionService.findById(id).map {
-            ResponseEntity.ok(toDTOResponse(it))
+            ResponseEntity.ok(toDTOEditResponse(it))
         }.orElse(ResponseEntity.notFound().build())
     }
 
