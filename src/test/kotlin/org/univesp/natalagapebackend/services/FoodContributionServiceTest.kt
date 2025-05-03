@@ -64,7 +64,7 @@ class FoodContributionServiceTest {
     @Test
     fun saveThrowsExceptionWhenFamilyNotFound() {
         val foodContributionRequest = FoodContributionRequest(1, 1, 1, 1, 1, false, false, null, "Observation")
-        val campaign = Campaign(1, Year.now(), "church", 1)
+        val campaign = Campaign(1, Year.now(), "church")
         val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED.toString())
         `when`(campaignService.findById(1)).thenReturn(Optional.of(campaign))
         `when`(leadershipService.findById(1)).thenReturn(Optional.of(leadership))
@@ -80,7 +80,7 @@ class FoodContributionServiceTest {
     @Test
     fun saveThrowsExceptionWhenLeadershipNotFound() {
         val foodContributionRequest = FoodContributionRequest(1, 1, 1, 1, 1, false, false, null, "Observation")
-        val campaign = Campaign(1, Year.now(), "church", 1)
+        val campaign = Campaign(1, Year.now(), "church")
         val family = Family(1, "Family 1", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation",Leadership(
             leaderId = 1,
             leaderName = "Leader 1",
@@ -102,7 +102,7 @@ class FoodContributionServiceTest {
     @Test
     fun saveThrowsExceptionWhenSponsorNotFound() {
         val foodContributionRequest = FoodContributionRequest(1, 1, 999, 1, 1, false, false, null, "Observation")
-        val campaign = Campaign(1, Year.now(), "Campaign 1", 1)
+        val campaign = Campaign(1, Year.now(), "Campaign 1")
         val family = Family(1, "Family 1", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation",Leadership(
             leaderId = 1,
             leaderName = "Leader 1",
@@ -124,30 +124,42 @@ class FoodContributionServiceTest {
     }
 
     @Test
-    fun checkCampaignFoodPerFamilyThrowsExceptionWhenLimitExceeded() {
-        val family = Family(1, "Family 1", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation",Leadership(
+    fun saveThrowsExceptionWhenFamilyAlreadyHasContributionForCampaign() {
+        val foodContributionRequest = FoodContributionRequest(1, 1, 1, 1, 1, false, false, null, "Observation")
+        val campaign = Campaign(1, Year.now(), "Campaign 1")
+        val family = Family(1, "Family 1", "123456789", "123 Street", Neighborhood(1, "Centro"), "No observation", Leadership(
             leaderId = 1,
             leaderName = "Leader 1",
             leaderPhone = "123456789",
             leaderRole = Role.LEADER,
             leaderColor = "BLACK"
         ))
-        val campaign = Campaign(1, Year.now(), "Campaign 1", 1)
-        val sponsor = Sponsor(1, "Sponsor 1", "123456789")
         val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED.toString())
-        val foodContributions = listOf(
-            FoodContribution(1, campaign, leadership, sponsor, family, false, false, null, "Observation")
-        )
-        `when`(foodContributionRepository.findFoodContributionByFamilyId(1)).thenReturn(foodContributions)
+        val sponsor = Sponsor(1, "Sponsor 1", "123456789")
+
+        `when`(campaignService.findById(1)).thenReturn(Optional.of(campaign))
+        `when`(familyService.findById(1)).thenReturn(Optional.of(family))
+        `when`(leadershipService.findById(1)).thenReturn(Optional.of(leadership))
+        `when`(sponsorService.findById(1)).thenReturn(Optional.of(sponsor))
+        `when`(foodContributionRepository.findFoodContributionByCampaignId(1))
+            .thenReturn(listOf(FoodContribution(1, campaign, leadership, sponsor, family,false, false, null, "Observation")))
 
         val exception = assertThrows<MaxContributionException> {
-            foodContributionService.checkCampaignFoodPerFamily(family, campaign)
+            foodContributionService.save(foodContributionRequest)
         }
 
-        assertEquals(
-            "Family has already received the maximum number of food donations for this campaign",
-            exception.message
-        )
+        assertEquals("Family already has a contribution for this campaign", exception.message)
+    }
 
+    @Test
+    fun updateThrowsExceptionWhenFoodContributionNotFound() {
+        val foodContributionRequest = FoodContributionRequest(999, 1, 1, 1, 1, false, false, null, "Observation")
+        `when`(foodContributionRepository.findById(999)).thenReturn(Optional.empty())
+
+        val exception = assertThrows<EntityNotFoundException> {
+            foodContributionService.update(foodContributionRequest)
+        }
+
+        assertEquals("Food contribution not found", exception.message)
     }
 }

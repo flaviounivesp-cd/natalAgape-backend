@@ -22,7 +22,7 @@ class CampaignControllerTest {
 
     @Test
     fun listAllReturnsCampaigns() {
-        val campaigns = listOf(Campaign(1, Year.of(2025), "Test 1", 2), Campaign(2, Year.of(2024), "Test 2", 1))
+        val campaigns = listOf(Campaign(1, Year.of(2025), "Test 1"), Campaign(2, Year.of(2024), "Test 2"))
         `when`(campaignService.listAll()).thenReturn(campaigns)
 
         val result = campaignController.listAll()
@@ -32,7 +32,7 @@ class CampaignControllerTest {
 
     @Test
     fun findByIdReturnsCampaign() {
-        val campaign = Optional.of(Campaign(1, Year.of(2025), "Test 1", 2))
+        val campaign = Optional.of(Campaign(1, Year.of(2025), "Test 1"))
         `when`(campaignService.findById(1)).thenReturn(campaign)
 
         val result = campaignController.findById(1)
@@ -51,7 +51,7 @@ class CampaignControllerTest {
 
     @Test
     fun saveCreatesCampaign() {
-        val campaign = Campaign(1, Year.of(2025), "Test 1", 2)
+        val campaign = Campaign(1, Year.of(2025), "Test 1")
         `when`(campaignService.save(campaign)).thenReturn(campaign)
 
         val result = campaignController.save(campaign)
@@ -61,7 +61,7 @@ class CampaignControllerTest {
 
     @Test
     fun updateModifiesCampaign() {
-        val campaign = Campaign(1L, Year.of(2025), "Test 1", 2)
+        val campaign = Campaign(1L, Year.of(2025), "Test 1")
         `when`(campaignService.findById(1L)).thenReturn(Optional.of(campaign))
         `when`(campaignService.update(campaign)).thenReturn(campaign)
 
@@ -72,7 +72,7 @@ class CampaignControllerTest {
 
     @Test
     fun updateModifiesCampaignIdNonExistent() {
-        val campaign = Campaign(1L, Year.of(2025), "Test 1", 2)
+        val campaign = Campaign(1L, Year.of(2025), "Test 1")
         `when`(campaignService.findById(1L)).thenReturn(Optional.empty())
 
         val result = campaignController.update(999L, campaign)

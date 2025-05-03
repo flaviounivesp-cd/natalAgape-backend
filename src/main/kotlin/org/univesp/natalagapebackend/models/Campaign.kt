@@ -12,7 +12,5 @@ data class Campaign(
 
     @Column(nullable = false) val campaignYear: Year,
 
-    @Column(nullable = false) val campaignChurch: String,
-
-    @Column(nullable = false) val foodDonationPerFamily: Int
+    @Column(nullable = false) val campaignChurch: String
 )

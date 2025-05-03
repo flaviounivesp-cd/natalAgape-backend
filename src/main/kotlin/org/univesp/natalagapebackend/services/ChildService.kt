@@ -12,7 +12,7 @@ import kotlin.jvm.optionals.getOrElse
 @Service
 class ChildService(private val childRepository: ChildRepository, private val familyService: FamilyService) {
 
-    fun listAll(): List<Child> = childRepository.findAll()
+    fun listAll(): List<Child> = childRepository.findAllActive()
 
     fun findById(id: Long): Optional<Child> = childRepository.findById(id)
 
