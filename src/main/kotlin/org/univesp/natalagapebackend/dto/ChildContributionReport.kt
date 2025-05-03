@@ -28,8 +28,7 @@ data class ChildrenWithNoContribution(
     val responsibleName: String,
     val childName: String,
     val neighborhoodName: String,
-    val leaderName: String,
-    val leaderColor: Color
+    val leaderName: String
 )
 
 data class ChildrenWithPendingContribution(
@@ -44,13 +43,17 @@ fun childContributionToDTOReport(
     childContributions: List<ChildContribution>,
     children: List<Child>
 ): ChildContributionReport {
-    val totalChildren = children.size
+    val childContributionsWithPending = childContributions.filter { it.wasDelivered == false && it.acceptance == null }
+    val childContributionsWithContribution = childContributions.filter { it.wasDelivered == true && it.acceptance != null }
+    val childContributionsWithNoContribution = children.filter { child ->
+        childContributions.none { it.child.childId == child.childId }
+    }
 
     return ChildContributionReport(
-        childWithContribution = childContributions.count { it.wasDelivered == true && it.acceptance != null },
-        childWithNoContribution = totalChildren - childContributions.size,
-        childWithPendingContribution = childContributions.count { it.wasDelivered == false && it.acceptance == null },
-        totalChildren = totalChildren,
+        childWithContribution = childContributionsWithContribution.size,
+        childWithNoContribution = childContributionsWithNoContribution.size,
+        childWithPendingContribution = childContributionsWithPending.size,
+        totalChildren = childContributionsWithContribution.size + childContributionsWithNoContribution.size + childContributionsWithPending.size,
         childrenWithContributionList = childContributions.filter { it.wasDelivered == true && it.acceptance != null }
             .map { childContribution ->
                 ChildrenWithContribution(
@@ -68,8 +71,7 @@ fun childContributionToDTOReport(
                 responsibleName = child.family.responsibleName,
                 childName = child.childName,
                 neighborhoodName = child.family.neighborhood.neighborhoodName,
-                leaderName = child.family.leadership.leaderName,
-                leaderColor = Color.valueOf(child.family.leadership.leaderColor)
+                leaderName = child.family.leadership.leaderName
             )
         },
         childrenWithPendingContributionList = childContributions.filter { it.wasDelivered == false && it.acceptance == null }
@@ -84,6 +86,3 @@ fun childContributionToDTOReport(
             }
     )
 }
-
-
-
