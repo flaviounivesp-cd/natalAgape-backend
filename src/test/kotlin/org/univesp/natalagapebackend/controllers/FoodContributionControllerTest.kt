@@ -38,8 +38,7 @@ class FoodContributionControllerTest {
         val campaign = Campaign(
             1,
             Year.now(),
-            "Church",
-            foodDonationPerFamily = 1
+            "Church"
         )
 
         val sponsor = Sponsor(
@@ -84,8 +83,7 @@ class FoodContributionControllerTest {
         val campaign = Campaign(
             1,
             Year.now(),
-            "Church",
-            foodDonationPerFamily = 1
+            "Church"
         )
 
         val sponsor = Sponsor(
@@ -135,8 +133,7 @@ class FoodContributionControllerTest {
         val campaign = Campaign(
             1,
             Year.now(),
-            "Church",
-            foodDonationPerFamily = 1
+            "Church"
         )
 
         val sponsor = Sponsor(
@@ -187,8 +184,7 @@ class FoodContributionControllerTest {
         val campaign = Campaign(
             1,
             Year.now(),
-            "Church",
-            foodDonationPerFamily = 1
+            "Church"
         )
 
         val sponsor = Sponsor(

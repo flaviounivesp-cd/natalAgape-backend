@@ -39,8 +39,7 @@ class ChildContributionControllerTest {
     private val campaign = Campaign(
         campaignId = 1,
         campaignYear = Year.now(),
-        campaignChurch = "Campaign Name",
-        foodDonationPerFamily = 1
+        campaignChurch = "Campaign Name"
     )
     private val leadership = Leadership(
         leaderId = 1,

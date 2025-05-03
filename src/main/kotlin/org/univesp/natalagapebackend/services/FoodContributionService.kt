@@ -7,8 +7,6 @@ import org.univesp.natalagapebackend.dto.FoodContributionRequest
 import org.univesp.natalagapebackend.dto.toDTOReport
 import org.univesp.natalagapebackend.dto.toLocalDate
 import org.univesp.natalagapebackend.handler.MaxContributionException
-import org.univesp.natalagapebackend.models.Campaign
-import org.univesp.natalagapebackend.models.Family
 import org.univesp.natalagapebackend.models.FoodContribution
 import org.univesp.natalagapebackend.repositories.FoodContributionRepository
 
@@ -24,7 +22,7 @@ class FoodContributionService(
 
     fun listAll(): List<FoodContribution> = foodContributionRepository.findAll()
     fun findById(id: Long) = foodContributionRepository.findById(id)
-    fun save(foodContribution: FoodContributionRequest) : FoodContribution {
+    fun save(foodContribution: FoodContributionRequest): FoodContribution {
         val campaign = campaignService.findById(foodContribution.campaignId).orElseThrow {
             EntityNotFoundException("Campaign not found")
         }
@@ -49,9 +47,11 @@ class FoodContributionService(
             observation = foodContribution.observation
         )
 
-        checkCampaignFoodPerFamily(family, campaign)
+        if (checkCampaignFoodContributionExists(foodContribution.familyId, foodContribution.campaignId)) {
+            throw MaxContributionException("Family already has a contribution for this campaign")
+        }
 
-       return foodContributionRepository.save(foodContributionToSave)
+        return foodContributionRepository.save(foodContributionToSave)
     }
 
     fun update(foodContribution: FoodContributionRequest): FoodContribution {
@@ -82,7 +82,13 @@ class FoodContributionService(
             donationDate = foodContribution.toLocalDate(),
             observation = foodContribution.observation
         )
-         return foodContributionRepository.save(donationToUpdate)
+
+        if (existingFoodContribution.family.familyId != donationToUpdate.family.familyId &&
+            checkCampaignFoodContributionExists(foodContribution.familyId, foodContribution.campaignId)) {
+            throw MaxContributionException("Family already has a contribution for this campaign")
+        }
+
+        return foodContributionRepository.save(donationToUpdate)
     }
 
     fun report(campaignId: Long): FoodContributionReport {
@@ -90,25 +96,23 @@ class FoodContributionService(
             EntityNotFoundException("Campaign not found")
         }
 
-        val families = familyService.listAll().map {
-            family ->
+        val families = familyService.listAll().map { family ->
             val children = childService.findByFamilyId(family.familyId)
             family.copy(totalChildren = children)
         }
-        val foodContribution = foodContributionRepository.findFoodContributionByCampaignId(campaign.campaignId).map{
-            foodContribution ->
-            val family = families.find { it.familyId == foodContribution.family.familyId }
-            val children = childService.findByFamilyId(foodContribution.family.familyId)
-            foodContribution.copy(family = family?.copy(totalChildren = children) ?: foodContribution.family)
-        }
+        val foodContribution =
+            foodContributionRepository.findFoodContributionByCampaignId(campaign.campaignId).map { foodContribution ->
+                val family = families.find { it.familyId == foodContribution.family.familyId }
+                val children = childService.findByFamilyId(foodContribution.family.familyId)
+                foodContribution.copy(family = family?.copy(totalChildren = children) ?: foodContribution.family)
+            }
 
         return toDTOReport(foodContribution, families)
     }
 
-    fun checkCampaignFoodPerFamily(family: Family, campaign: Campaign) {
-        val foodContributions = foodContributionRepository.findFoodContributionByFamilyId(family.familyId)
-        if(foodContributions.size >= campaign.foodDonationPerFamily){
-            throw MaxContributionException("Family has already received the maximum number of food donations for this campaign")
-        }
+    private fun checkCampaignFoodContributionExists(familyId: Long, campaignId: Long): Boolean {
+        return foodContributionRepository
+            .findFoodContributionByCampaignId(campaignId)
+            .any { it.family.familyId == familyId }
     }
 }

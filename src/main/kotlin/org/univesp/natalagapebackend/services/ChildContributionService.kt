@@ -3,6 +3,7 @@ package org.univesp.natalagapebackend.services
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
 import org.univesp.natalagapebackend.dto.*
+import org.univesp.natalagapebackend.handler.MaxContributionException
 import org.univesp.natalagapebackend.models.*
 import org.univesp.natalagapebackend.repositories.ChildContributionRepository
 
@@ -36,6 +37,9 @@ class ChildContributionService(
             acceptance = request.toLocalDate(),
             observation = request.observation
         )
+        if (checkIfChildContributionExists(child.childId, campaign.campaignId)) {
+            throw MaxContributionException("Child contribution already exists for this child and campaign")
+        }
 
         return childContributionRepository.save(childContribution)
     }
@@ -57,6 +61,12 @@ class ChildContributionService(
             observation = request.observation
         )
 
+        if (existingContribution.child.childId != updatedContribution.child.childId &&
+            checkIfChildContributionExists(child.childId, campaign.campaignId)
+        ) {
+            throw MaxContributionException("Child contribution already exists for this child and campaign")
+        }
+
         return childContributionRepository.save(updatedContribution)
     }
 
@@ -66,21 +76,22 @@ class ChildContributionService(
         }
         val children = childService.listAll()
 
-        val childrenContributions = childContributionRepository.findChildrenContributionByCampaignId(campaign.campaignId)
-            .map { childrenContribution ->
+        val childrenContributions =
+            childContributionRepository.findChildrenContributionByCampaignId(campaign.campaignId)
+                .map { childrenContribution ->
 
-                ChildContribution(
-                    id = childrenContribution.id,
-                    campaign = childrenContribution.campaign,
-                    sponsor = childrenContribution.sponsor,
-                    child = childrenContribution.child,
-                    leadership = childrenContribution.leadership,
-                    wasDelivered = childrenContribution.wasDelivered,
-                    acceptance = childrenContribution.acceptance,
-                    observation = childrenContribution.observation
-                )
+                    ChildContribution(
+                        id = childrenContribution.id,
+                        campaign = childrenContribution.campaign,
+                        sponsor = childrenContribution.sponsor,
+                        child = childrenContribution.child,
+                        leadership = childrenContribution.leadership,
+                        wasDelivered = childrenContribution.wasDelivered,
+                        acceptance = childrenContribution.acceptance,
+                        observation = childrenContribution.observation
+                    )
 
-            }
+                }
         return childContributionToDTOReport(childrenContributions, children)
     }
 
@@ -103,4 +114,12 @@ class ChildContributionService(
         leadershipService.findById(leadershipId).orElseThrow {
             EntityNotFoundException("Leadership not found")
         }
+
+    private fun checkIfChildContributionExists(
+        childId: Long,
+        campaignId: Long
+    ): Boolean {
+        return childContributionRepository.findChildrenContributionByCampaignId(campaignId)
+            .any { it.child.childId == childId }
+    }
 }

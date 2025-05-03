@@ -7,7 +7,6 @@ import org.univesp.natalagapebackend.models.ChildContribution
 
 @Repository
 interface ChildContributionRepository : JpaRepository<ChildContribution, Long> {
-    @Query("SELECT cc FROM ChildContribution cc WHERE cc.campaign.campaignId = :id")
-    fun findChildrenContributionByCampaignId(id: Long): List<ChildContribution>
-
+    @Query("SELECT cc FROM ChildContribution cc WHERE cc.campaign.campaignId = :campaignId")
+    fun findChildrenContributionByCampaignId(campaignId: Long): List<ChildContribution>
 }
