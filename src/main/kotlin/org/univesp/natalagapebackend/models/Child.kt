@@ -27,6 +27,9 @@ data class Child(
 
     val pictureUrl: String? = null,
 
+    @Column(nullable = false)
+    var isActive: Boolean = true,
+
     @ManyToOne
     @JoinColumn(name = "family_id")
     var family: Family
