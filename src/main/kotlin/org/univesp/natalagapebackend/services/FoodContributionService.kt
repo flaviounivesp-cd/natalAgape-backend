@@ -20,7 +20,13 @@ class FoodContributionService(
     private val childService: ChildService
 ) {
 
-    fun listAll(): List<FoodContribution> = foodContributionRepository.findAll()
+    fun listAll(): List<FoodContribution> {
+        val campaigns = campaignService.findAllByIsActive()
+        return foodContributionRepository.findAll().filter { foodContribution ->
+            campaigns.any { it.campaignId == foodContribution.campaign.campaignId }
+        }
+    }
+
     fun findById(id: Long) = foodContributionRepository.findById(id)
     fun save(foodContribution: FoodContributionRequest): FoodContribution {
         val campaign = campaignService.findById(foodContribution.campaignId).orElseThrow {
