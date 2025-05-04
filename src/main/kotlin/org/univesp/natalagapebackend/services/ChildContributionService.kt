@@ -16,8 +16,12 @@ class ChildContributionService(
     private val leadershipService: LeadershipService
 ) {
 
-    fun listAll(): List<ChildContribution> =
-        childContributionRepository.findAll()
+    fun listAll(): List<ChildContribution> {
+        val campaigns = campaignService.findAllByIsActive()
+        return childContributionRepository.findAll().filter { childContribution ->
+            campaigns.any { it.campaignId == childContribution.campaign.campaignId }
+        }
+    }
 
     fun findById(id: Long) = childContributionRepository.findById(id)
 

@@ -23,7 +23,7 @@ class CampaignControllerTest {
     @Test
     fun listAllReturnsCampaigns() {
         val campaigns = listOf(Campaign(1, Year.of(2025), "Test 1"), Campaign(2, Year.of(2024), "Test 2"))
-        `when`(campaignService.listAll()).thenReturn(campaigns)
+        `when`(campaignService.findAllByIsActive()).thenReturn(campaigns)
 
         val result = campaignController.listAll()
 
