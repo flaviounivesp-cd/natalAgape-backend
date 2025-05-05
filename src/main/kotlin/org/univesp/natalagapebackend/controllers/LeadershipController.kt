@@ -26,8 +26,8 @@ class LeadershipController(val leadershipService: LeadershipService) {
 
 
     @PostMapping
-    fun save(@RequestBody leadership: Leadership): ResponseEntity<Leadership> {
-        val saved = leadershipService.save(leadership)
+    fun save(@RequestBody leadershipDTO: LeadershipDTO): ResponseEntity<Leadership> {
+        val saved = leadershipService.save(leadershipDTO)
         return ResponseEntity.ok(saved)
     }
 

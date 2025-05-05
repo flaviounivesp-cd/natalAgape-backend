@@ -18,6 +18,12 @@ class Leadership(
     @Column(nullable = false) val leaderRole: Role,
 
 
-    @Column(nullable = false) val leaderColor: String
+    @Column(nullable = false) val leaderColor: String,
+
+    @Column(nullable = false, unique = true)
+    val userName: String,
+
+    @Column(nullable = false)
+    val password: String
 
 )

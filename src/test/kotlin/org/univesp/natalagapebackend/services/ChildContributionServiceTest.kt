@@ -50,7 +50,9 @@ class ChildContributionServiceTest {
     fun saveThrowsExceptionWhenChildAlreadyHasContributionForCampaign() {
         val childContributionRequest = ChildContributionRequest(1, 1, 1, 1, 1, false, null, "Observation")
         val campaign = Campaign(1, Year.now(), "Campaign 1")
-        val leadership = Leadership(1, "Leader 1", "123456789", Role.LEADER, "BLACK")
+        val leadership = Leadership(1, "Leader 1", "123456789", Role.LEADER, "BLACK",
+            userName = "username",
+            password = "password")
         val family =
             Family(1, "Family 1", "123456789", "Address 1", Neighborhood(1, "City 1"), null, leadership,true, null)
         val child = Child(1, "Child 1", "Male", LocalDate.now(), "Clothes", "Shoes", null, true, family)

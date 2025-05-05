@@ -43,7 +43,9 @@ class FamilyServiceTest {
                     leaderName = "Leader 1",
                     leaderPhone = "123456789",
                     leaderRole = Role.LEADER,
-                    leaderColor = "BLACK"
+                    leaderColor = "BLACK",
+                    userName = "username",
+                    password = "password"
                 )
 
             ), Family(
@@ -57,7 +59,9 @@ class FamilyServiceTest {
                     leaderName = "Leader 2",
                     leaderPhone = "123456789",
                     leaderRole = Role.LEADER,
-                    leaderColor = "WHITE"
+                    leaderColor = "WHITE",
+                    userName = "username",
+                    password = "password"
                 )
             )
         )
@@ -81,7 +85,9 @@ class FamilyServiceTest {
                 leaderName = "Leader 1",
                 leaderPhone = "123456789",
                 leaderRole = Role.LEADER,
-                leaderColor = "BLACK"
+                leaderColor = "BLACK",
+                userName = "username",
+                password = "password"
             )
         )
         `when`(familyRepository.findById(1)).thenReturn(Optional.of(family))
@@ -109,7 +115,9 @@ class FamilyServiceTest {
             leaderName = "Leader 1",
             leaderPhone = "123456789",
             leaderRole = Role.LEADER,
-            leaderColor = "BLACK"
+            leaderColor = "BLACK",
+            userName = "username",
+            password = "password"
         )
         val family = Family(
             1, "New Family", "123456789", "Address", neighborhood, "Observation", leadership
@@ -150,7 +158,9 @@ class FamilyServiceTest {
                     leaderName = "Leader 1",
                     leaderPhone = "123456789",
                     leaderRole = Role.LEADER,
-                    leaderColor = "BLACK"
+                    leaderColor = "BLACK",
+                    userName = "username",
+                    password = "password"
                 )
             )
         val updatedFamily = Family(
@@ -165,7 +175,9 @@ class FamilyServiceTest {
                 leaderName = "Leader 1",
                 leaderPhone = "123456789",
                 leaderRole = Role.LEADER,
-                leaderColor = "BLACK"
+                leaderColor = "BLACK",
+                userName = "username",
+                password = "password"
             )
         )
         `when`(familyRepository.findById(1)).thenReturn(Optional.of(existingFamily))
@@ -175,7 +187,9 @@ class FamilyServiceTest {
             leaderName = "Leader 1",
             leaderPhone = "123456789",
             leaderRole = Role.LEADER,
-            leaderColor = "BLACK"
+            leaderColor = "BLACK",
+            userName = "username",
+            password = "password"
         )))
         `when`(familyRepository.save(any(Family::class.java))).thenReturn(updatedFamily)
 
@@ -203,7 +217,9 @@ class FamilyServiceTest {
                 leaderName = "Leader 1",
                 leaderPhone = "123456789",
                 leaderRole = Role.LEADER,
-                leaderColor = "BLACK"
+                leaderColor = "BLACK",
+                userName = "username",
+                password = "password"
             ))
         `when`(familyRepository.findById(1)).thenReturn(Optional.of(existingFamily))
         `when`(neighborhoodService.findById(1)).thenReturn(Optional.empty())

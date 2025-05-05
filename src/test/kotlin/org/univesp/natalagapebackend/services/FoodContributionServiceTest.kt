@@ -65,7 +65,9 @@ class FoodContributionServiceTest {
     fun saveThrowsExceptionWhenFamilyNotFound() {
         val foodContributionRequest = FoodContributionRequest(1, 1, 1, 1, 1, false, false, null, "Observation")
         val campaign = Campaign(1, Year.now(), "church")
-        val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED.toString())
+        val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED.toString(),
+            userName = "username",
+            password = "password")
         `when`(campaignService.findById(1)).thenReturn(Optional.of(campaign))
         `when`(leadershipService.findById(1)).thenReturn(Optional.of(leadership))
         `when`(familyService.findById(1)).thenReturn(Optional.empty())
@@ -86,7 +88,9 @@ class FoodContributionServiceTest {
             leaderName = "Leader 1",
             leaderPhone = "123456789",
             leaderRole = Role.LEADER,
-            leaderColor = "BLACK"
+            leaderColor = "BLACK",
+            userName = "username",
+            password = "password"
         ))
         `when`(campaignService.findById(1)).thenReturn(Optional.of(campaign))
         `when`(familyService.findById(1)).thenReturn(Optional.of(family))
@@ -108,9 +112,13 @@ class FoodContributionServiceTest {
             leaderName = "Leader 1",
             leaderPhone = "123456789",
             leaderRole = Role.LEADER,
-            leaderColor = "BLACK"
+            leaderColor = "BLACK",
+            userName = "username",
+            password = "password"
         ))
-        val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED.toString())
+        val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED.toString(),
+            userName = "username",
+            password = "password")
         `when`(campaignService.findById(1)).thenReturn(Optional.of(campaign))
         `when`(familyService.findById(1)).thenReturn(Optional.of(family))
         `when`(leadershipService.findById(1)).thenReturn(Optional.of(leadership))
@@ -132,9 +140,13 @@ class FoodContributionServiceTest {
             leaderName = "Leader 1",
             leaderPhone = "123456789",
             leaderRole = Role.LEADER,
-            leaderColor = "BLACK"
+            leaderColor = "BLACK",
+            userName = "username",
+            password = "password"
         ))
-        val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED.toString())
+        val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED.toString(),
+            userName = "username",
+            password = "password")
         val sponsor = Sponsor(1, "Sponsor 1", "123456789")
 
         `when`(campaignService.findById(1)).thenReturn(Optional.of(campaign))

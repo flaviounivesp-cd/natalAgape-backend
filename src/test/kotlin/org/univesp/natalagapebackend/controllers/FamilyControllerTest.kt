@@ -41,7 +41,9 @@ class FamilyControllerTest {
                 leaderName = "Leader 1",
                 leaderPhone = "123456789",
                 leaderRole = Role.LEADER,
-                leaderColor = "BLACK"
+                leaderColor = "BLACK",
+                userName = "username",
+                password = "password"
             )
         )
         val family02 = Family(
@@ -50,7 +52,9 @@ class FamilyControllerTest {
                 leaderName = "Leader 1",
                 leaderPhone = "123456789",
                 leaderRole = Role.LEADER,
-                leaderColor = "BLACK"
+                leaderColor = "BLACK",
+                userName = "username",
+                password = "password"
             )
         )
 
@@ -123,7 +127,9 @@ class FamilyControllerTest {
                 leaderName = "Leader 1",
                 leaderPhone = "123456789",
                 leaderRole = Role.LEADER,
-                leaderColor = "BLACK"
+                leaderColor = "BLACK",
+                userName = "username",
+                password = "password"
             )
         )
         val children = listOf(
@@ -188,7 +194,9 @@ class FamilyControllerTest {
         `when`(familyService.save(familyInput)).thenReturn(
             familyInput.toEntity(
                 Neighborhood(1, "Centro"),
-                Leadership(1, "Leader 1", "123456789", Role.LEADER, "BLACK")
+                Leadership(1, "Leader 1", "123456789", Role.LEADER, "BLACK",
+                    userName = "username",
+                    password = "password")
             )
         )
 
@@ -214,7 +222,9 @@ class FamilyControllerTest {
                     leaderName = "Leader 1",
                     leaderPhone = "123456789",
                     leaderRole = Role.LEADER,
-                    leaderColor = "BLACK"
+                    leaderColor = "BLACK",
+                    userName = "username",
+                    password = "password"
                 )
             )
         val updatedFamily =
@@ -224,7 +234,9 @@ class FamilyControllerTest {
                     leaderName = "Leader 1",
                     leaderPhone = "123456789",
                     leaderRole = Role.LEADER,
-                    leaderColor = "BLACK"
+                    leaderColor = "BLACK",
+                    userName = "username",
+                    password = "password"
                 )
             )
         `when`(familyService.findById(1)).thenReturn(Optional.of(existingFamily))

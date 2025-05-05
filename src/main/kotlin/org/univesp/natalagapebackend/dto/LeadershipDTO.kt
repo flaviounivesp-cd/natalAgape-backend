@@ -8,7 +8,9 @@ data class LeadershipDTO(
     val leaderName: String,
     val leaderPhone: String,
     val leaderRole: String,
-    val leaderColor: String
+    val leaderColor: String,
+    val userName: String,
+    val password: String
 )
 
 fun Leadership.toDTO(): LeadershipDTO {
@@ -17,16 +19,19 @@ fun Leadership.toDTO(): LeadershipDTO {
         leaderName = this.leaderName,
         leaderPhone = this.leaderPhone,
         leaderRole = this.leaderRole.toString(),
-        leaderColor = this.leaderColor
+        leaderColor = this.leaderColor,
+        userName = this.userName,
+        password = this.password
     )
 }
 
-fun LeadershipDTO.toEntity(): Leadership {
+fun LeadershipDTO.toEntity(encodedPassword: String): Leadership {
     return Leadership(
         leaderId = this.leaderId,
         leaderName = this.leaderName,
         leaderPhone = this.leaderPhone,
         leaderRole = Role.valueOf(this.leaderRole),
-        leaderColor = this.leaderColor
-    )
+        leaderColor = this.leaderColor,
+        userName = this.userName,
+        password = encodedPassword)
 }
