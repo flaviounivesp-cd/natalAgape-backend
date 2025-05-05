@@ -60,7 +60,9 @@ class ChildServiceTest {
         val family = Family(
             1, "Family 1", "Address", "City", Neighborhood(1, "Centro"), null, Leadership(
                 1, "Leader 1", "9999",
-                Role.ADMIN, Color.BLACK.toString()
+                Role.ADMIN, Color.BLACK.toString(),
+                userName = "username",
+                password = "password"
             ), true
         )
         val children = listOf(

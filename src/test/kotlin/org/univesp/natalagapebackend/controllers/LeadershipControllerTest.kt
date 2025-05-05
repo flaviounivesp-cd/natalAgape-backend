@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.springframework.http.ResponseEntity
 import org.univesp.natalagapebackend.models.Color
+import org.univesp.natalagapebackend.models.DTO.LeadershipDTO
 import org.univesp.natalagapebackend.models.DTO.toDTO
 import org.univesp.natalagapebackend.models.Leadership
 import org.univesp.natalagapebackend.models.Role
@@ -26,8 +27,12 @@ class LeadershipControllerTest {
     @Test
     fun getAllLeadershipsReturnsList() {
         val leaderships = listOf(
-            Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString()),
-            Leadership(2L, "Leader2", "987654321", Role.LEADER, Color.BLUE.toString())
+            Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString(),
+                userName = "username",
+                password = "password"),
+            Leadership(2L, "Leader2", "987654321", Role.LEADER, Color.BLUE.toString(),
+                userName = "username",
+                password = "password")
         )
         `when`(leadershipService.getAllLeaderships()).thenReturn(leaderships)
 
@@ -38,7 +43,9 @@ class LeadershipControllerTest {
 
     @Test
     fun findByIdReturnsLeadership() {
-        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString())
+        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString(),
+            userName = "username",
+            password = "password")
         `when`(leadershipService.findById(1L)).thenReturn(Optional.of(leadership))
 
         val result = leadershipController.findById(1L)
@@ -57,17 +64,23 @@ class LeadershipControllerTest {
 
     @Test
     fun saveCreatesLeadership() {
-        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString())
-        `when`(leadershipService.save(leadership)).thenReturn(leadership)
+        val leadershipdto = LeadershipDTO(1L, "Leader1", "123456789", Role.ADMIN.toString(), Color.RED.toString(),
+            userName = "username",
+            password = "password")
+        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString(),userName = "username",
+            password = "password")
+        `when`(leadershipService.save(leadershipdto)).thenReturn(leadership)
 
-        val result = leadershipController.save(leadership)
+        val result = leadershipController.save(leadershipdto)
 
         assertEquals(ResponseEntity.ok(leadership), result)
     }
 
     @Test
     fun updateModifiesLeadership() {
-        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString())
+        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString(),
+            userName = "username",
+            password = "password")
 
         `when`(leadershipService.findById(1L)).thenReturn(Optional.of(leadership))
         `when`(leadershipService.update(leadership)).thenReturn(leadership)
@@ -79,7 +92,9 @@ class LeadershipControllerTest {
 
     @Test
     fun updateReturnsNotFound() {
-        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString())
+        val leadership = Leadership(1L, "Leader1", "123456789", Role.ADMIN, Color.RED.toString(),
+            userName = "username",
+            password = "password")
         `when`(leadershipService.findById(999L)).thenReturn(Optional.empty())
 
         val result = leadershipController.update(999L, leadership)

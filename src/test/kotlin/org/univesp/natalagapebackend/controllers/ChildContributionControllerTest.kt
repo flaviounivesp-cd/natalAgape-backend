@@ -33,7 +33,9 @@ class ChildContributionControllerTest {
             leaderName = "Leader 1",
             leaderPhone = "123456789",
             leaderRole = Role.LEADER,
-            leaderColor = "BLACK"
+            leaderColor = "BLACK",
+            userName = "username",
+            password = "password"
         )
     )
     private val campaign = Campaign(
@@ -46,7 +48,9 @@ class ChildContributionControllerTest {
         leaderName = "Leader Name",
         leaderPhone = "123456789",
         leaderRole = Role.LEADER,
-        leaderColor = "BLACK"
+        leaderColor = "BLACK",
+        userName = "username",
+        password = "password"
     )
     private val sponsor = Sponsor(
         sponsorId = 2,
