@@ -32,7 +32,7 @@ class LeadershipController(val leadershipService: LeadershipService) {
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody leadership: Leadership): ResponseEntity<Leadership> {
+    fun update(@PathVariable id: Long, @RequestBody leadership: LeadershipDTO): ResponseEntity<Leadership> {
         return leadershipService.findById(id).map { _ ->
             ResponseEntity.ok(leadershipService.update(leadership))
         }.orElse(ResponseEntity.notFound().build())

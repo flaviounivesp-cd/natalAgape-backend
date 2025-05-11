@@ -20,6 +20,15 @@ class LeadershipService(
 
     fun update(leadership: Leadership): Leadership = leadershipRepository.save(leadership)
 
+    fun update(leadershipNew: LeadershipDTO): Leadership {
+        var hashedPassword = ""
+        if (!leadershipNew.password.isNullOrEmpty()) {
+            hashedPassword = passwordEncoder.encode(leadershipNew.password)
+        }
+
+        return leadershipRepository.updateLeadership(leadershipNew.toEntity(hashedPassword))
+    }
+
     fun save(leadership: LeadershipDTO): Leadership {
 
         val hashedPassword = passwordEncoder.encode(leadership.password)
