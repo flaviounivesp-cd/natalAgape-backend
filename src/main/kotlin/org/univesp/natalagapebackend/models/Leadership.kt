@@ -10,14 +10,20 @@ class Leadership(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val leaderId: Long,
-    @Column(nullable = false) val leaderName: String,
+    @Column(nullable = false) var leaderName: String,
 
-    @Column(nullable = false) val leaderPhone: String,
+    @Column(nullable = false) var leaderPhone: String,
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false) val leaderRole: Role,
+    @Column(nullable = false) var leaderRole: Role,
 
 
-    @Column(nullable = false) val leaderColor: String
+    @Column(nullable = false) var leaderColor: String,
+
+    @Column(nullable = false, unique = true)
+    var userName: String,
+
+    @Column(nullable = true)
+    var password: String?
 
 )

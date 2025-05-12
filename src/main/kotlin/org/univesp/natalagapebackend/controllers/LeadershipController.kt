@@ -26,13 +26,13 @@ class LeadershipController(val leadershipService: LeadershipService) {
 
 
     @PostMapping
-    fun save(@RequestBody leadership: Leadership): ResponseEntity<Leadership> {
-        val saved = leadershipService.save(leadership)
+    fun save(@RequestBody leadershipDTO: LeadershipDTO): ResponseEntity<Leadership> {
+        val saved = leadershipService.save(leadershipDTO)
         return ResponseEntity.ok(saved)
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody leadership: Leadership): ResponseEntity<Leadership> {
+    fun update(@PathVariable id: Long, @RequestBody leadership: LeadershipDTO): ResponseEntity<Leadership> {
         return leadershipService.findById(id).map { _ ->
             ResponseEntity.ok(leadershipService.update(leadership))
         }.orElse(ResponseEntity.notFound().build())
