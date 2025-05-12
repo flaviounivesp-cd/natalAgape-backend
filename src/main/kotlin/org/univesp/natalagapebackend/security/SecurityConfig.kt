@@ -23,9 +23,7 @@ class SecurityConfig(
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .csrf { 
-                it.ignoringRequestMatchers("/api/auth/login") 
-            }
+            .csrf { it.disable() }
             .authorizeHttpRequests {
                 it.requestMatchers("/api/auth/login").permitAll()
                 it.anyRequest().permitAll()
