@@ -1,5 +1,6 @@
 package org.univesp.natalagapebackend.security
 
+import JwtTokenProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -9,12 +10,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.univesp.natalagapebackend.services.LeadershipUserDetailsService
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val userDetailsService: LeadershipUserDetailsService
+    private val userDetailsService: LeadershipUserDetailsService,
+    private val jwtTokenProvider: JwtTokenProvider
 ) {
 
     @Bean
@@ -23,11 +26,14 @@ class SecurityConfig(
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .csrf { it.disable() }
+            .csrf {
+                it.disable() // Desabilita CSRF para permitir requisições de autenticação
+            }
             .authorizeHttpRequests {
                 it.requestMatchers("/api/auth/login").permitAll()
-                it.anyRequest().permitAll()
+                it.anyRequest().authenticated() // Exige autenticação para outras rotas
             }
+            .addFilterBefore(JwtAuthenticationFilter(jwtTokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }
 
