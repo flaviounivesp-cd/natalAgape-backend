@@ -1,72 +1,3 @@
-//package org.univesp.natalagapebackend.controllers
-//
-//import JwtTokenProvider
-//import org.junit.jupiter.api.Assertions.assertEquals
-//import org.junit.jupiter.api.Test
-//import org.junit.jupiter.api.extension.ExtendWith
-//import org.mockito.InjectMocks
-//import org.mockito.Mock
-//import org.mockito.Mockito
-//import org.mockito.junit.jupiter.MockitoExtension
-//import org.springframework.http.ResponseEntity
-//import org.springframework.security.authentication.AuthenticationManager
-//import org.springframework.security.authentication.BadCredentialsException
-//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-//import org.univesp.natalagapebackend.dto.LoginRequest
-//import org.univesp.natalagapebackend.dto.LoginResponse
-//
-//@ExtendWith(MockitoExtension::class)
-//class AuthControllerTest {
-//
-//    @Mock
-//    private lateinit var authenticationManager: AuthenticationManager
-//
-//    @Mock
-//    private lateinit var jwtTokenProvider: JwtTokenProvider
-//
-//    @InjectMocks
-//    private lateinit var authController: AuthController
-//
-//    @Test
-//    fun `deve retornar token ao realizar login`() {
-//        // Arrange
-//        val username = "user"
-//        val password = "password"
-//        val token = "jwt-token"
-//        val loginRequest = LoginRequest(username, password)
-//        val authentication = UsernamePasswordAuthenticationToken(username, password)
-//
-//        Mockito.`when`(authenticationManager.authenticate(authentication)).thenReturn(authentication)
-//        Mockito.`when`(jwtTokenProvider.generateToken(authentication.toString())).thenReturn(token)
-//
-//        // Act
-//        val response: ResponseEntity<LoginResponse> = authController.login(loginRequest)
-//
-//        // Assert
-//        assertEquals(200, response.statusCodeValue)
-//        assertEquals(token, response.body?.token)
-//    }
-//
-//    @Test
-//    fun `deve retornar 401 quando as credenciais forem invalidas`() {
-//        // Arrange
-//        val username = "invalidUser"
-//        val password = "invalidPassword"
-//        val loginRequest = LoginRequest(username, password)
-//        val authentication = UsernamePasswordAuthenticationToken(username, password)
-//
-//        Mockito.`when`(authenticationManager.authenticate(authentication))
-//            .thenThrow(BadCredentialsException("Credenciais inválidas"))
-//
-//        // Act
-//        val exception = org.junit.jupiter.api.assertThrows<BadCredentialsException> {
-//            authController.login(loginRequest)
-//        }
-//
-//        // Assert
-//        assertEquals("Credenciais inválidas", exception.message)
-//    }
-//}
 package org.univesp.natalagapebackend.controllers
 
 import JwtTokenProvider
@@ -77,18 +8,16 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.univesp.natalagapebackend.dto.LoginRequest
 import org.univesp.natalagapebackend.dto.LoginResponse
 
 @ExtendWith(MockitoExtension::class)
 class AuthControllerTest {
+
     @Mock
     private lateinit var authenticationManager: AuthenticationManager
 
@@ -104,21 +33,17 @@ class AuthControllerTest {
         val username = "user"
         val password = "password"
         val token = "jwt-token"
-        val authorities = listOf(SimpleGrantedAuthority("ROLE_USER"))
         val loginRequest = LoginRequest(username, password)
-        val authentication = Mockito.mock(Authentication::class.java)
+        val authentication = UsernamePasswordAuthenticationToken(username, password)
 
-        Mockito.`when`(authentication.name).thenReturn(username)
-        Mockito.`when`(authentication.authorities).thenReturn(authorities)
-        Mockito.`when`(authenticationManager.authenticate(Mockito.any(UsernamePasswordAuthenticationToken::class.java)))
-            .thenReturn(authentication)
-        Mockito.`when`(jwtTokenProvider.generateToken(username, "ROLE_USER")).thenReturn(token)
+        Mockito.`when`(authenticationManager.authenticate(authentication)).thenReturn(authentication)
+        Mockito.`when`(jwtTokenProvider.generateToken(authentication.toString())).thenReturn(token)
 
         // Act
         val response: ResponseEntity<LoginResponse> = authController.login(loginRequest)
 
         // Assert
-        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(200, response.statusCodeValue)
         assertEquals(token, response.body?.token)
     }
 
@@ -128,8 +53,9 @@ class AuthControllerTest {
         val username = "invalidUser"
         val password = "invalidPassword"
         val loginRequest = LoginRequest(username, password)
+        val authentication = UsernamePasswordAuthenticationToken(username, password)
 
-        Mockito.`when`(authenticationManager.authenticate(Mockito.any(UsernamePasswordAuthenticationToken::class.java)))
+        Mockito.`when`(authenticationManager.authenticate(authentication))
             .thenThrow(BadCredentialsException("Credenciais inválidas"))
 
         // Act
