@@ -25,7 +25,10 @@ class AuthController(
         val authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(request.username, request.password)
         )
-        val token = jwtTokenProvider.generateToken(authentication.toString())
+        val username = authentication.name
+        val authorities = authentication.authorities.joinToString(",") { it.authority }
+
+        val token = jwtTokenProvider.generateToken(username, authorities)
         return ResponseEntity.ok(LoginResponse(token))
     }
 }
