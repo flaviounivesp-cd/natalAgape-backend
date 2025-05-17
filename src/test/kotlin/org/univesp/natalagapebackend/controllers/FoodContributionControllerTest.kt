@@ -44,7 +44,8 @@ class FoodContributionControllerTest {
         val sponsor = Sponsor(
             1,
             "Sponsor Name",
-            "Sponsor Phone"
+            "Sponsor Phone",
+            "Sponsor Address"
         )
 
         val family = Family(
@@ -93,7 +94,8 @@ class FoodContributionControllerTest {
         val sponsor = Sponsor(
             1,
             "Sponsor Name",
-            "Sponsor Phone"
+            "Sponsor Phone",
+            "Sponsor Address"
         )
 
         val family = Family(
@@ -147,7 +149,8 @@ class FoodContributionControllerTest {
         val sponsor = Sponsor(
             1,
             "Sponsor Name",
-            "Sponsor Phone"
+            "Sponsor Phone",
+            "Sponsor Address"
         )
 
         val family = Family(
@@ -202,7 +205,8 @@ class FoodContributionControllerTest {
         val sponsor = Sponsor(
             1,
             "Sponsor Name",
-            "Sponsor Phone"
+            "Sponsor Phone",
+            "Sponsor Address"
         )
 
         val family = Family(

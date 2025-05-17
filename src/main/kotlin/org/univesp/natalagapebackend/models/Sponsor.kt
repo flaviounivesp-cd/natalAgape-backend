@@ -12,5 +12,7 @@ data class Sponsor (
     @Column(nullable = false)
     val sponsorName: String,
     @Column(nullable = false)
-    val sponsorPhone : String
+    val sponsorPhone : String,
+    @Column(nullable = true)
+    val sponsorAddress: String
 )

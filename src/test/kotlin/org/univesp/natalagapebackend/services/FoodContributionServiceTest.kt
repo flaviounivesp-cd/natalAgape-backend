@@ -147,7 +147,7 @@ class FoodContributionServiceTest {
         val leadership = Leadership(1, "Leader 1", "123456789", Role.ADMIN, Color.RED.toString(),
             userName = "username",
             password = "password")
-        val sponsor = Sponsor(1, "Sponsor 1", "123456789")
+        val sponsor = Sponsor(1, "Sponsor 1", "123456789",  "123 Street")
 
         `when`(campaignService.findById(1)).thenReturn(Optional.of(campaign))
         `when`(familyService.findById(1)).thenReturn(Optional.of(family))
