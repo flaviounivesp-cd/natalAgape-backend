@@ -23,6 +23,7 @@ class JwtTokenProvider(
             .claim("authorities", authorities).signWith(secretKey, SignatureAlgorithm.HS256).compact()
     }
 
+
     // Extrai o nome de usuário do token
     fun extractUsername(token: String): String {
         return extractClaim(token, Claims::getSubject)
