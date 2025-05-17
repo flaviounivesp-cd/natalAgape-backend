@@ -55,7 +55,8 @@ class ChildContributionControllerTest {
     private val sponsor = Sponsor(
         sponsorId = 2,
         sponsorName = "Sponsor Name",
-        sponsorPhone = "123456789"
+        sponsorPhone = "123456789",
+        sponsorAddress = "Sponsor Address"
     )
     private val child = Child(
         childId = 1,
