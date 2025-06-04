@@ -33,5 +33,10 @@ data class Family(
     var isActive: Boolean = true,
 
     @Transient
-    var totalChildren: List<Child>? = emptyList()
-)
+    var totalChildren: List<Child>? = emptyList(),
+
+    val pictureUrl: String? = null,
+
+    val pictureSubscription : String? = null
+
+    )

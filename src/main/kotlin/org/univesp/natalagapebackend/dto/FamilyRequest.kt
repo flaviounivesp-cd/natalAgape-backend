@@ -11,7 +11,9 @@ data class FamilyDTOInput(
     val address: String,
     val neighborhoodId: Long,
     val observation: String? = null,
-    val leaderId: Long
+    val leaderId: Long,
+    val pictureUrl: String? = null,
+    val pictureSubscription : String? = null
 )
 
 fun FamilyDTOInput.toEntity(neighborhood: Neighborhood, leadership: Leadership): Family {
@@ -22,6 +24,8 @@ fun FamilyDTOInput.toEntity(neighborhood: Neighborhood, leadership: Leadership):
         address = this.address,
         neighborhood = neighborhood,
         observation = this.observation,
-        leadership = leadership
+        leadership = leadership,
+        pictureUrl = this.pictureUrl,
+        pictureSubscription = this.pictureSubscription
     )
 }
