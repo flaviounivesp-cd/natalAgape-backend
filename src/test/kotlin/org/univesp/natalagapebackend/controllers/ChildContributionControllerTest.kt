@@ -85,8 +85,8 @@ class ChildContributionControllerTest {
     fun listAllReturnsChildContributions() {
 
         val contributions = listOf(
-            ChildContribution(1, campaign, sponsor, leadership, child, true, donationDate1, observation1),
-            ChildContribution(2, campaign, sponsor, leadership, child, false, donationDate2, observation2)
+            ChildContribution(1, campaign, sponsor, leadership, child, true, true,donationDate1, observation1),
+            ChildContribution(2, campaign, sponsor, leadership, child, false, false,donationDate2, observation2)
         )
         `when`(childContributionService.listAll()).thenReturn(contributions)
 
@@ -100,7 +100,7 @@ class ChildContributionControllerTest {
     @Test
     fun findByIdReturnsChildContribution() {
         val contribution = Optional.of(
-            ChildContribution(1, campaign, sponsor, leadership, child, true, donationDate1, "Observation")
+            ChildContribution(1, campaign, sponsor, leadership, child, true, true,donationDate1, "Observation")
         )
         `when`(childContributionService.findById(1)).thenReturn(contribution)
 
@@ -121,8 +121,8 @@ class ChildContributionControllerTest {
 
     @Test
     fun saveCreatesChildContribution() {
-        val request = ChildContributionRequest(1, 1, 1, 1,1, true, donationDate1.toString(), "Observation")
-        val savedContribution = ChildContribution(1, campaign, sponsor, leadership, child, true, donationDate1, "Observation")
+        val request = ChildContributionRequest(1, 1, 1, 1,1, true, true,donationDate1.toString(), "Observation")
+        val savedContribution = ChildContribution(1, campaign, sponsor, leadership, child, true,true, donationDate1, "Observation")
 
         `when`(childContributionService.save(request)).thenReturn(savedContribution)
 
@@ -133,10 +133,10 @@ class ChildContributionControllerTest {
 
     @Test
     fun updateModifiesChildContribution() {
-        val existingContribution = ChildContribution(1, campaign, sponsor, leadership, child, false, null, "Old Observation")
-        val request = ChildContributionRequest(1, 1, 2, 1, 1, true, "Updated Observation")
+        val existingContribution = ChildContribution(1, campaign, sponsor, leadership, child, false, false,null, "Old Observation")
+        val request = ChildContributionRequest(1, 1, 2, 1, 1, true, true,"Updated Observation")
         val updatedContribution =
-            ChildContribution(1, campaign, sponsor, leadership, child, true, null, "Updated Observation")
+            ChildContribution(1, campaign, sponsor, leadership, child, true, true,null, "Updated Observation")
 
         `when`(childContributionService.findById(1)).thenReturn(Optional.of(existingContribution))
         `when`(childContributionService.update(1, request)).thenReturn(updatedContribution)
@@ -148,7 +148,7 @@ class ChildContributionControllerTest {
 
     @Test
     fun updateReturnsNotFound() {
-        val request = ChildContributionRequest(1, 2, 3, 1, 1, true, "2023-12-01", "Updated Observation")
+        val request = ChildContributionRequest(1, 2, 3, 1, 1, true, true,"2023-12-01", "Updated Observation")
         `when`(childContributionService.findById(999L)).thenReturn(Optional.empty())
 
         val result = childContributionController.update(999L, request)

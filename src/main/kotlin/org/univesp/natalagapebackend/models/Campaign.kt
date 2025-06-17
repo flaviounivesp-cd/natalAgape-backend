@@ -2,6 +2,7 @@ package org.univesp.natalagapebackend.models
 
 import jakarta.persistence.*
 import lombok.Data
+import java.math.BigDecimal
 import java.time.Year
 
 @Data
@@ -15,4 +16,6 @@ data class Campaign(
     @Column(nullable = false) val campaignChurch: String,
 
     @Column(nullable = false) val isActive: Boolean = true,
+
+    val valueDonation: BigDecimal? = BigDecimal.ZERO
 )

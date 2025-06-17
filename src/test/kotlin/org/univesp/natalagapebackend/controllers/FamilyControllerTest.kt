@@ -90,8 +90,9 @@ class FamilyControllerTest {
                     )
                 ),
                 leaderId = 1,
-                leaderName = "Leader 1"
-
+                leaderName = "Leader 1",
+                pictureUrl = null,
+                pictureSubscription = null
             ),
             FamilyWithChildrenDTO(
                 familyId = 2,
@@ -103,7 +104,9 @@ class FamilyControllerTest {
                 observation = "No observation",
                 children = emptyList(),
                 leaderId = 1,
-                leaderName = "Leader 1"
+                leaderName = "Leader 1",
+                pictureUrl = null,
+                pictureSubscription = null
             )
         )
 
@@ -161,7 +164,9 @@ class FamilyControllerTest {
                     )
                 },
                 leaderId = 1,
-                leaderName = "Leader 1"
+                leaderName = "Leader 1",
+                pictureUrl = null,
+                pictureSubscription = null
             )
         )
 

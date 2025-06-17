@@ -36,15 +36,19 @@ data class ChildrenWithPendingContribution(
     val childName: String,
     val sponsorName: String,
     val sponsorPhone: String,
-    val leaderName: String
+    val leaderName: String,
+    val clothesDelivered: Boolean? = null,
+    val toyDelivered: Boolean? = null
 )
 
 fun childContributionToDTOReport(
     childContributions: List<ChildContribution>,
     children: List<Child>
 ): ChildContributionReport {
-    val childContributionsWithPending = childContributions.filter { it.wasDelivered == false && it.acceptance == null }
-    val childContributionsWithContribution = childContributions.filter { it.wasDelivered == true && it.acceptance != null }
+    val childContributionsWithPending =
+        childContributions.filter { (it.wasDelivered == false || it.toyDelivered == false) && it.acceptance == null }
+    val childContributionsWithContribution =
+        childContributions.filter { it.wasDelivered == true && it.acceptance != null }
     val childContributionsWithNoContribution = children.filter { child ->
         childContributions.none { it.child.childId == child.childId }
     }
@@ -74,14 +78,17 @@ fun childContributionToDTOReport(
                 leaderName = child.family.leadership.leaderName
             )
         },
-        childrenWithPendingContributionList = childContributions.filter { it.wasDelivered == false && it.acceptance == null }
+        childrenWithPendingContributionList = childContributions.filter {  (it.wasDelivered == false || it.toyDelivered == false) && it.acceptance == null }
             .map { childContribution ->
                 ChildrenWithPendingContribution(
                     responsibleName = childContribution.child.family.responsibleName,
                     childName = childContribution.child.childName,
                     sponsorName = childContribution.sponsor.sponsorName,
                     sponsorPhone = childContribution.sponsor.sponsorPhone,
-                    leaderName = childContribution.child.family.leadership.leaderName
+                    leaderName = childContribution.child.family.leadership.leaderName,
+                    clothesDelivered = childContribution.wasDelivered,
+                    toyDelivered = childContribution.toyDelivered
+
                 )
             }
     )

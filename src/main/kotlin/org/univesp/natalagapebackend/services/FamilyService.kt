@@ -48,7 +48,9 @@ class FamilyService(
                 address = familyDTO.address,
                 neighborhood = newNeighborhood,
                 observation = familyDTO.observation,
-                leadership = leadership
+                leadership = leadership,
+                pictureUrl = familyDTO.pictureUrl,
+                pictureSubscription = familyDTO.pictureSubscription
             )
             familyRepository.save(familyToUpdate)
 

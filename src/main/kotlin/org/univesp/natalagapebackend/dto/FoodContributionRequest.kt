@@ -12,7 +12,7 @@ data class FoodContributionRequest(
     val wasDelivered: Boolean? = null,
     val paidInSpecies: Boolean? = null,
     val donationDate: String? = null,
-    val observation: String? = null,
+    val observation: String? = null
 )
 
 fun FoodContributionRequest.toLocalDate(): LocalDate? {

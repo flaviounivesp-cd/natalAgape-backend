@@ -9,6 +9,7 @@ data class ChildContributionRequest(
     val leaderId: Long,
     val childId: Long,
     val wasDelivered: Boolean,
+    val isToyDelivered: Boolean,
     val acceptance: String? = null,
     val observation: String? = null
 )

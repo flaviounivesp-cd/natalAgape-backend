@@ -22,6 +22,7 @@ data class ChildContribution(
     //@JoinColumn(name = "child_id", nullable = false)
     val child: Child,
     val wasDelivered: Boolean? = null,
+    val toyDelivered: Boolean? = null,
     val acceptance: LocalDate? = null,
     val observation: String? = null
 )

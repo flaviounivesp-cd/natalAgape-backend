@@ -48,7 +48,7 @@ class ChildContributionServiceTest {
 
     @Test
     fun saveThrowsExceptionWhenChildAlreadyHasContributionForCampaign() {
-        val childContributionRequest = ChildContributionRequest(1, 1, 1, 1, 1, false, null, "Observation")
+        val childContributionRequest = ChildContributionRequest(1, 1, 1, 1, 1, false, true, null, "Observation")
         val campaign = Campaign(1, Year.now(), "Campaign 1")
         val leadership = Leadership(1, "Leader 1", "123456789", Role.LEADER, "BLACK",
             userName = "username",
@@ -63,7 +63,7 @@ class ChildContributionServiceTest {
         `when`(leadershipService.findById(1)).thenReturn(Optional.of(leadership))
         `when`(sponsorService.findById(1)).thenReturn(Optional.of(sponsor))
         `when`(childContributionRepository.findChildrenContributionByCampaignId(1))
-            .thenReturn(listOf(ChildContribution(1, campaign, sponsor, leadership, child,false, null, "Observation")))
+            .thenReturn(listOf(ChildContribution(1, campaign, sponsor, leadership, child,false, false,null, "Observation")))
 
         val exception = assertThrows<MaxContributionException> {
             childContributionService.save(childContributionRequest)
@@ -74,7 +74,7 @@ class ChildContributionServiceTest {
 
     @Test
     fun updateThrowsExceptionWhenChildContributionNotFound() {
-        val childContributionRequest = ChildContributionRequest(999, 1, 1, 1, 1, false, null, "Observation")
+        val childContributionRequest = ChildContributionRequest(999, 1, 1, 1, 1, false, true, null, "Observation")
         `when`(childContributionRepository.findById(999)).thenReturn(Optional.empty())
 
         val exception = assertThrows<EntityNotFoundException> {
