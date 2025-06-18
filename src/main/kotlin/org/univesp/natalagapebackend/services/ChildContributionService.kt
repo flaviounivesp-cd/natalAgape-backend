@@ -6,6 +6,8 @@ import org.univesp.natalagapebackend.dto.*
 import org.univesp.natalagapebackend.handler.MaxContributionException
 import org.univesp.natalagapebackend.models.*
 import org.univesp.natalagapebackend.repositories.ChildContributionRepository
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 
 @Service
 class ChildContributionService(
@@ -39,7 +41,8 @@ class ChildContributionService(
             leadership = leadership,
             wasDelivered = request.wasDelivered,
             acceptance = request.toLocalDate(),
-            observation = request.observation
+            observation = request.observation,
+            toyDelivered = request.isToyDelivered ?: false
         )
         if (checkIfChildContributionExists(child.childId, campaign.campaignId)) {
             throw MaxContributionException("Child contribution already exists for this child and campaign")
@@ -61,8 +64,9 @@ class ChildContributionService(
             sponsor = sponsor,
             child = child,
             wasDelivered = request.wasDelivered,
-            acceptance = request.toLocalDate(),
-            observation = request.observation
+            acceptance = convertToLocalDate(request.acceptance),
+            observation = request.observation,
+            toyDelivered = request.isToyDelivered
         )
 
         if (existingContribution.child.childId != updatedContribution.child.childId &&
@@ -92,7 +96,8 @@ class ChildContributionService(
                         leadership = childrenContribution.leadership,
                         wasDelivered = childrenContribution.wasDelivered,
                         acceptance = childrenContribution.acceptance,
-                        observation = childrenContribution.observation
+                        observation = childrenContribution.observation,
+                        toyDelivered = childrenContribution.toyDelivered
                     )
 
                 }
@@ -125,5 +130,13 @@ class ChildContributionService(
     ): Boolean {
         return childContributionRepository.findChildrenContributionByCampaignId(campaignId)
             .any { it.child.childId == childId }
+    }
+
+    private fun convertToLocalDate(dateString: String?): LocalDate? {
+        return try {
+            dateString?.let { LocalDate.parse(it) }
+        } catch (e: DateTimeParseException) {
+            null
+        }
     }
 }

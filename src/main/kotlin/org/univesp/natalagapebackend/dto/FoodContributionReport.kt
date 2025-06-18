@@ -3,13 +3,15 @@ package org.univesp.natalagapebackend.dto
 import org.univesp.natalagapebackend.models.Color
 import org.univesp.natalagapebackend.models.Family
 import org.univesp.natalagapebackend.models.FoodContribution
+import java.math.BigDecimal
 
 data class FoodContributionReport(
     val familiesWithContribution: Int,
     val familiesWithNoContribution: Int,
     val familiesWithPendingContribution: Int,
     val totalActiveFamilies: Int,
-
+    val valueNoContribution: BigDecimal,
+    val valuePendingContribution: BigDecimal,
     val familiesWithContributionList: List<FamiliesWithContribution>,
     val familiesWithNoContributionList: List<FamiliesWithNoContribution>,
     val familiesWithPendingContributionList: List<FamiliesWithPendingContribution>,
@@ -40,7 +42,7 @@ fun toDTOReport(
     foodContributions: List<FoodContribution>,
     families: List<Family>,
 ): FoodContributionReport {
-
+    val valueDonation = foodContributions.firstOrNull()?.campaign?.valueDonation ?: 0.toBigDecimal()
     val familiesWithPendingContribution = foodContributions.filter { it.wasDelivered == false && it.donationDate == null }
     val familiesWithContribution = foodContributions.filter { it.wasDelivered == true && it.donationDate != null }
     val familiesWithNoContribution = families.filter { family ->
@@ -48,7 +50,8 @@ fun toDTOReport(
     }
 
     return FoodContributionReport(
-
+        valueNoContribution = valueDonation.multiply(familiesWithNoContribution.size.toBigDecimal()),
+        valuePendingContribution = valueDonation.multiply(familiesWithPendingContribution.size.toBigDecimal()),
         familiesWithContribution = familiesWithContribution.size,
         familiesWithNoContribution = familiesWithNoContribution.size,
         familiesWithPendingContribution = familiesWithPendingContribution.size,

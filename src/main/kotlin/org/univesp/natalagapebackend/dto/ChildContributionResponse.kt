@@ -7,6 +7,7 @@ data class ChildContributionResponse(
     val sponsorName: String,
     val childName: String,
     val wasDelivered: Boolean? = null,
+    val toyDelivered: Boolean? = null,
     val acceptance: String,
     val observation: String? = null
 )
@@ -18,6 +19,7 @@ fun toDTOResponse(childContribution: ChildContribution): ChildContributionRespon
         childName = childContribution.child.childName,
         wasDelivered = childContribution.wasDelivered,
         acceptance = childContribution.acceptance.toString(),
-        observation = childContribution.observation
+        observation = childContribution.observation,
+        toyDelivered = childContribution.toyDelivered ?: false
     )
 }

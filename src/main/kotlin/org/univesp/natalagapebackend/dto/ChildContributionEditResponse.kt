@@ -11,6 +11,7 @@ data class ChildContributionEditResponse(
     val wasDelivered: Boolean? = null,
     val acceptance: String,
     val observation: String? = null,
+    val isToyDelivered: Boolean? = null
 )
 
 fun toDTOEditResponse(childContribution: ChildContribution): ChildContributionEditResponse {
@@ -22,6 +23,7 @@ fun toDTOEditResponse(childContribution: ChildContribution): ChildContributionEd
         sponsorId = childContribution.sponsor.sponsorId,
         wasDelivered = childContribution.wasDelivered,
         acceptance = childContribution.acceptance.toString(),
-        observation = childContribution.observation
+        observation = childContribution.observation,
+        isToyDelivered = childContribution.toyDelivered ?: false
     )
 }

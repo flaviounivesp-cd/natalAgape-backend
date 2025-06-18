@@ -8,7 +8,7 @@ plugins {
 
 group = "org.univesp"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_20
 
 configurations {
     compileOnly {
