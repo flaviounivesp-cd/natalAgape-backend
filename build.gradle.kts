@@ -47,6 +47,7 @@ dependencies {
     implementation("javax.xml.bind:jaxb-api:2.3.1")
     implementation("jakarta.validation:jakarta.validation-api:3.0.2")
     implementation("org.hibernate.validator:hibernate-validator:8.0.0.Final")
+    implementation ("com.drewnoakes:metadata-extractor:2.18.0")
 }
 
 kotlin {

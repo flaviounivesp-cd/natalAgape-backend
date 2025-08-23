@@ -3,10 +3,12 @@ package org.univesp.natalagapebackend.services
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
+import compressImageToMaxSize
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
+
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -16,6 +18,7 @@ class GoogleDriveService {
 
     private val logger: Logger = LoggerFactory.getLogger(GoogleDriveService::class.java)
     private val drive: Drive
+
     init {
         logger.info("Initializing GoogleDriveService")
 
@@ -67,11 +70,32 @@ class GoogleDriveService {
         val fileMetadata = File()
         fileMetadata.name = file.originalFilename
 
-        val fileContent = ByteArrayInputStream(file.bytes)
+        val fileExtension = file.originalFilename?.substringAfterLast('.', "") ?: ""
+        val extensionNameAllow = listOf("jpg", "jpeg", "png")
+
+        if (fileExtension !in extensionNameAllow) {
+            logger.error("Unsupported file extension: ${file.originalFilename}")
+            throw IllegalArgumentException("Unsupported file extension: $fileExtension")
+        }
+        var fileBytes = file.bytes
+        val maxSize = 500 * 1024  // 500 KB
+
+        // Compacta toda imagem maior que 5MB
+        if (fileBytes.size > maxSize) {
+            logger.info("Compressing image before upload")
+            fileBytes = compressImageToMaxSize(fileBytes, fileExtension, maxSize)
+        }
+
+        val fileContent = ByteArrayInputStream(fileBytes)
         val mediaContent = com.google.api.client.http.InputStreamContent(
             file.contentType,
             fileContent
         )
+
+
+
+
+
 
         return try {
             val uploadedFile = drive.files().create(fileMetadata, mediaContent)
