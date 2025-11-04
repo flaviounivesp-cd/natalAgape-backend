@@ -26,6 +26,7 @@ data class FamiliesWithContribution(
 data class FamiliesWithNoContribution(
     val responsibleName: String,
     val neighborhoodName: String,
+    val leaderName: String,
     val totalChildren: Int,
 )
 
@@ -70,6 +71,7 @@ fun toDTOReport(
             FamiliesWithNoContribution(
                 responsibleName = family.responsibleName,
                 neighborhoodName = family.neighborhood.neighborhoodName,
+                leaderName = family.leadership.leaderName,
                 totalChildren = family.totalChildren?.size ?: 0,
             )
         },

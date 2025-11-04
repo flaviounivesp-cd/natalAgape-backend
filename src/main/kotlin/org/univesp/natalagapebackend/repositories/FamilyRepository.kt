@@ -9,7 +9,7 @@ import org.univesp.natalagapebackend.models.Family
 @Repository
 interface FamilyRepository : JpaRepository<Family, Long> {
 
-    @Query("SELECT f FROM Family f WHERE f.isActive = true")
+    @Query("SELECT f FROM Family f WHERE f.isActive = true order by f.responsibleName")
     fun findAllActive(): List<Family>
 
     @Modifying

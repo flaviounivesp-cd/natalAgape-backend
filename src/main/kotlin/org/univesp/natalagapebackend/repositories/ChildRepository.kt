@@ -8,10 +8,10 @@ import org.univesp.natalagapebackend.models.Child
 
 @Repository
 interface ChildRepository : JpaRepository<Child, Long> {
-    @Query("select * from child where family_id = :familyId and is_active = true", nativeQuery = true)
+    @Query("select * from child where family_id = :familyId and is_active = true order by child_name", nativeQuery = true)
     fun findAllByFamilyId(familyId: Long): List<Child>?
 
-    @Query("select * from child where is_active = true", nativeQuery = true)
+    @Query("select * from child where is_active = true order by child_name", nativeQuery = true)
     fun findAllActive(): List<Child>
 
     @Modifying

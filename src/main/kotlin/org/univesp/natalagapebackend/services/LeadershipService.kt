@@ -1,5 +1,6 @@
 package org.univesp.natalagapebackend.services
 
+import org.springframework.data.domain.Sort
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.univesp.natalagapebackend.models.DTO.LeadershipDTO
@@ -12,7 +13,7 @@ class LeadershipService(
     private val leadershipRepository: LeadershipRepository,
     private val passwordEncoder: PasswordEncoder
 ) {
-    fun getAllLeaderships(): List<Leadership> = leadershipRepository.findAll()
+    fun getAllLeaderships(): List<Leadership> = leadershipRepository.findAll(Sort.by("leaderName"))
 
     fun findById(id: Long) = leadershipRepository.findById(id)
 
